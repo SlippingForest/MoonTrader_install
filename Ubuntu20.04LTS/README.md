@@ -1,8 +1,8 @@
 # MoonTrader Ubuntu 20.04 LTS
 
 Скрипт устанавливает MoonTrader актуальной версии, на Ubuntu 20.04 LTS
-- проверен на AWS, Vultr
-- потенциально, будет работать на любом сервере с Ubuntu 20.04 LTS
+- Проверен на AWS, Vultr
+- Добавлена возможность установки с помощью ссылки на DropBox
 
 # Важно к прочтению: 
 - Для любителей открывать доступ с любого IP в FireWall - добавлена установка fail2ban, для защиты перебора паролей SSH. Три не верные попытки входа, блокировка доступа к SSH по IP на сутки.
@@ -13,7 +13,6 @@
 ```bash
 wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/Ubuntu20.04LTS/install.sh | bash
 ```
-
 после выполнения, хост перезагрузится
 
 # Запуск
@@ -24,13 +23,13 @@ wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/ma
 ```bash
 tmux
 ```
-2. запускаем MoonTrader
+2. Запуск ядра(MTCore)
 ```bash
 MoonTrader
 ```
-3. Если все прошло успешно, отключаемся от сессии tmux сочитанием клавиш Ctrl+B D (клавишу D нажимать отдельно, без Ctrl)
-4. теперь можно отключаться от сессии SSH, MoonTrader продолжит работать в фоне
-5. Для подключения к сессии где работает MoonTrader, чтоб остановить(Ctrl+C) к примеру, вводим
+3. Если все прошло успешно, отключиться от сессии tmux сочитанием клавиш Ctrl+B D (клавишу D нажимать отдельно, без Ctrl)
+4. Можно отключаться от SSH, MoonTrader продолжит работать в фоне
+5. Для подключения к сессии где работает ядро(MTcore), чтоб остановить(Ctrl+C) или перезапустить
 ```bash
 tmux attach
 ```
