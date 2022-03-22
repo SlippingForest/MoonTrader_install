@@ -1,5 +1,45 @@
+#!/bin/bash
 
+# Разрешения проходжение трафика на порт 4242 UDP(а так же тригер ввода пароля от root если требуется)
+sudo ufw allow 4242/udp > /dev/null 2>&1
 
+# Выбор варианта установки
+PS3='Enter installation option number: '
+
+select install_type in "Automatic installation of the latest version" "Install your version using the Dropbox link [.tar.xz]" "Install your version using the Dropbox link [.7z]"
+do
+    break
+done
+
+# Установка MoonTrader
+mkdir MT && cd MT
+case $install_type in
+    "Automatic installation of the latest version")
+        wget https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz && tar -xpJf MoonTrader-linux-x86_64.tar.xz
+    ;;
+    "Install your version using the Dropbox link [.tar.xz]")
+        read -p 'paste DropBox link [.tar.xz]: ' dropbox_link
+        wget -O MoonTrader-linux-x86_64.tar.xz ${dropbox_link%?}1 && tar -xpJf MoonTrader-linux-x86_64.tar.xz
+    ;;
+    "Install your version using the Dropbox link [.7z]")
+        read -p 'paste DropBox link [.7z]: ' dropbox_link
+        sudo apt -yqq install p7zip-full
+        wget -O MoonTrader-linux-x86_64.tar.7z ${dropbox_link%?}1 && 7z x MoonTrader-linux-x86_64.tar.7z
+    ;;
+    *)
+        echo "Wrong answer, exit"
+        exit 1
+    ;;
+esac
+
+MTCore_path=~/MT/MTCore
+if [ -f "$MTCore_path" ]; then
+    chmod +x $MTCore_path
+    sudo ln -s $MTCore_path /usr/bin/MoonTrader
+else
+    echo "Wrong link, exit"
+    exit 1
+fi
 
 # Удаление менеджера пакетов snap
 sudo apt -yqq remove snapd --purge
@@ -9,9 +49,6 @@ sudo rm -rf /var/lib/snapd
 
 # Удаление почтового сервера EXIM(если он есть)
 sudo apt -yqq remove exim exim4
-
-# Разрешения проходжение трафика на порт 4242 UDP
-sudo ufw allow 4242/udp
 
 # Установка всех критических обновлений операционной системы
 sudo apt update && sudo apt -yqq upgrade
@@ -48,18 +85,18 @@ sudo apt -yqq install apt-transport-https && sudo apt update && sudo apt install
 
 # Включение swap если он выключен и RAM меньше 2Gb
 if free | awk '/^Swap:/ {exit !$2}'; then
-  wall "swap already enabled"
+    wall "swap already enabled"
 else
-  if [ $(awk '/^MemTotal:/{print $2}' /proc/meminfo) -lt 2030664 ]; then
-    sudo fallocate -l 2G /swapfile
-    sudo chmod 600 /swapfile
-    sudo mkswap /swapfile
-    sudo swapon /swapfile
-    echo "/swapfile none swap sw 0 0" >>/etc/fstab
-    wall "RAM < 2GB, swap enabled"
-  else
-    wall "RAM > 1GB, swap not need"
-  fi
+    if [ $(awk '/^MemTotal:/{print $2}' /proc/meminfo) -lt 2030664 ]; then
+        sudo fallocate -l 2G /swapfile
+        sudo chmod 600 /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        echo "/swapfile none swap sw 0 0" >>/etc/fstab
+        wall "RAM < 2GB, swap enabled"
+    else
+        wall "RAM > 1GB, swap not need"
+    fi
 fi
 
 # Установка зависимостей для MoonTrader(без них как минимум не работают отчеты)
@@ -68,11 +105,6 @@ sudo ln -s libtommath.so.1 /usr/lib/x86_64-linux-gnu/libtommath.so.0
 
 # Подчищаем установленные не актуальные пакеты
 sudo apt -yqq autoremove
-
-# Установка MoonTrader
-mkdir MT && cd MT
-wget https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz && tar -xpJf MoonTrader-linux-x86_64.tar.xz
-sudo ln -s ~/MT/MTCore /usr/bin/MoonTrader
 
 # Перезагрузка сервера
 wall "The server will be restarted"
