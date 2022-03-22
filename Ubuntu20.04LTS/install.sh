@@ -1,3 +1,6 @@
+
+
+
 # Удаление менеджера пакетов snap
 sudo apt -yqq remove snapd --purge
 sudo rm -rf ~/snap
@@ -14,7 +17,6 @@ sudo ufw allow 4242/udp
 sudo apt update && sudo apt -yqq upgrade
 
 # Уставка стабильного ядра linux и установка его по умолчанию при запуске
-# это тестовый вариант, потмоу как на предустановленном ядре от AWS бот уходит в 100% загрузку CPU, опустошает всю RAM после и закрывается(вылетает) ядром
 # sudo apt -yqq install linux-headers-5.4.0-104-generic linux-image-5.4.0-104-generic
 # sudo sed -i "s/GRUB_DEFAULT=0/GRUB_DEFAULT='Advanced options for Ubuntu>Ubuntu, with Linux 5.4.0-104-generic'/" /etc/default/grub
 # sudo update-grub
