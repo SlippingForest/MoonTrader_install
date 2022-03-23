@@ -206,6 +206,25 @@ function func_install_IPBan {
     }
 }
 
+# Функция установки MoonTrader
+function func_install_MoonTrader {
+    Write-Host Install MoonTrader -ForegroundColor Cyan
+    if (-Not (Test-Path -Path "C:\MoonTrader\MTCore.exe" -PathType Leaf)) {
+        if (-Not (Test-Path MoonTrader-sfx.exe -PathType Leaf)) {
+            Write-Host Download MoonTrader -ForegroundColor Cyan
+            Invoke-WebRequest -O MoonTrader-sfx.exe "https://cdn3.moontrader.com/beta/windows-x86_64/MoonTrader-sfx.exe"
+            MoonTrader-sfx.exe | Invoke-Expression
+        }
+        if (Test-Path MoonTrader-sfx.exe -PathType Leaf) {
+            New-Item -ItemType Directory -Force -Path "C:\MoonTrader\"
+            Move-Item -Path MoonTrader-sfx.exe -Destination "C:\MoonTrader\MoonTrader-sfx.exe"
+            Start-Process -FilePath "MoonTrader-sfx.exe" -WorkingDirectory "C:\MoonTrader\"
+            Remove-Item "C:\MoonTrader\MoonTrader-sfx.exe"
+        }
+    }
+}
+
+
 # Установка использования протокола шифрования HTTPS - TLS 1.2 по умолчанию
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
@@ -252,21 +271,21 @@ foreach ($ScheduledTaskObject in $list_schduleDisable) {
     Invoke-Expression ("Disable-ScheduledTask -TaskName " + $ScheduledTaskObject[0] + ' -TaskPath ' + $ScheduledTaskObject[1])  2>&1
 }
 
-# Removing Windows Defender which also removes Scheduled Tasks and services related to Windows Defender
+# Удаление Windows Defender
 Write-Host Removing Windows Defender. -ForegroundColor Cyan
 Uninstall-WindowsFeature -Name Windows-Defender
 
-# Allow MTcore ports
+# Добавление правил в FireWall для подключения к MTCore
 Write-Host FireWall Allow inbound ICMPv4. -ForegroundColor Cyan
 New-NetFirewallRule -DisplayName "Allow inbound ICMPv4" -Direction Inbound -Protocol ICMPv4 -IcmpType 8  -Action Allow | Out-Null
 Write-Host FireWall Allow inbound UDP 4242 for MoonTrader Core. -ForegroundColor Cyan
 New-NetFirewallRule -DisplayName "Allow inbound UDP 4242 for MoonTrader Core" -Direction Inbound -Action Allow -EdgeTraversalPolicy Allow -Protocol UDP -LocalPort 4242 | Out-Null
 
-# Disable IPv6
+# Отключение IPv6
 Write-Host Disable IPv6. -ForegroundColor Cyan
 Disable-NetAdapterBinding -Name "*" -ComponentID ms_tcpip6 | Out-Null
 
-# Install IP_BAN
+# Установка защиты от перебора паролей IPBan
 func_install_IPBan
 
 Write-Host "All optimisations and installations are complete. Please restart your system." -ForegroundColor Green
