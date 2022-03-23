@@ -58,14 +58,16 @@ sudo apt update && sudo apt -yqq upgrade
 # sudo update-grub
 
 # Установка fail2ban, для защиты от перебора паролей SSH (3 неудачные попытки в течении 1 часа = бан на 24 часа)
-sudo apt -yqq install fail2ban
-sudo touch /etc/fail2ban/jail.local
-sudo echo "[sshd]" >>/etc/fail2ban/jail.local
-sudo echo "port = ssh" >>/etc/fail2ban/jail.local
-sudo echo "findtime = 3600" >>/etc/fail2ban/jail.local
-sudo echo "maxretry = 3" >>/etc/fail2ban/jail.local
-sudo echo "bantime = 86400" >>/etc/fail2ban/jail.local
-sudo service fail2ban restart
+if ! service --status-all | grep -Fq 'fail2ban'; then    
+	sudo apt -yqq install fail2ban
+	sudo touch /etc/fail2ban/jail.local
+	sudo echo "[sshd]" >>/etc/fail2ban/jail.local
+	sudo echo "port = ssh" >>/etc/fail2ban/jail.local
+	sudo echo "findtime = 3600" >>/etc/fail2ban/jail.local
+	sudo echo "maxretry = 3" >>/etc/fail2ban/jail.local
+	sudo echo "bantime = 86400" >>/etc/fail2ban/jail.local
+	sudo service fail2ban restart
+fi
 
 # Установка файлового менеджера Midnight Commander
 sudo apt -yqq install mc
