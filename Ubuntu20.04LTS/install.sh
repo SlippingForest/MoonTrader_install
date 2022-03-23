@@ -1,29 +1,10 @@
 #!/bin/bash
 
-function color_echo {
-	text_red="\e[0;31m"
-	text_gold="\e[0;33m"
-	text_green="\e[0;32m"
-	text_dafault="\e[0m"
-	
-	case $1 in
-		"red")
-			echo -e "${text_red}$2${text_dafault}"
-		;;
-		"gold")
-			echo -e "${text_gold}$2${text_dafault}"
-		;;
-		"green")
-			echo -e "${text_green}$2${text_dafault}"
-		;;
-	esac
-}
-
 # Разрешения проходжение трафика на порт 4242 UDP(а так же тригер ввода пароля от root если требуется)
 sudo ufw allow 4242/udp > /dev/null 2>&1
 clear
 # Выбор варианта установки
-color_echo green "Choose an installation option"
+echo "\e[0;32m Choose an installation option \e[0m"
 # echo -e "${text_orange}Choose an installation option${text_dafault}"
 PS3="Number: "
 
@@ -36,14 +17,14 @@ mt_folder="MoonTrader"
 while [ -d "$HOME/$mt_folder" ]
 do
 	clear
-  	color_echo gold "[WARNING] Folder $HOME/$mt_folder already exist"
+  	echo "[WARNING] Folder $HOME/$mt_folder already exist"
 	read -p 'Enter a new folder name: ' new_foldername
 	mt_folder=$new_foldername
 done
 mkdir "$HOME/$mt_folder"
 
 # Скачивание и установка MoonTrader
-color_echo green "Download and unpucking MoonTrader to $HOME/$mt_folder/"
+echo "Download and unpucking MoonTrader to $HOME/$mt_folder/"
 case $install_type in
     "Automatic installation of the latest version")
         wget https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$HOME/$mt_folder"
@@ -61,7 +42,7 @@ case $install_type in
 		rm MoonTrader-linux-x86_64.7z
     ;;
     *)
-        color_echo red "Wrong answer, exit"
+        echo "Wrong answer, exit"
         exit 1
     ;;
 esac
@@ -70,9 +51,9 @@ if [ -f "$HOME/$mt_folder/MTCore" ]; then
     chmod +x "$HOME/$mt_folder/MTCore"
 	sudo rm /usr/bin/MoonTrader
     sudo ln -s "$HOME/$mt_folder/MTCore" /usr/bin/MoonTrader
-	color_echo green "Update /usr/bin/MoonTrader link to $HOME/$mt_folder/MTCore"
+	echo green "Update /usr/bin/MoonTrader link to $HOME/$mt_folder/MTCore"
 else
-    color_echo red "Wrong link, exit"
+    echo "Wrong link, exit"
     exit 1
 fi
 
