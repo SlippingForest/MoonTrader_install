@@ -5,13 +5,13 @@ sudo ufw allow 4242/udp > /dev/null 2>&1
 
 # Выбор варианта установки
 PS3='Enter installation option number: '
-
 select install_type in "Automatic installation of the latest version" "Install your version using the Dropbox link [.tar.xz]" "Install your version using the Dropbox link [.7z]"
 do
     break
 done
 
-# Установка MoonTrader
+# Скачивание и установка MoonTrader
+MTCore_path=~/MT/MTCore
 mkdir MT && cd MT
 case $install_type in
     "Automatic installation of the latest version")
@@ -24,7 +24,7 @@ case $install_type in
     "Install your version using the Dropbox link [.7z]")
         read -p 'paste DropBox link [.7z]: ' dropbox_link
         sudo apt -yqq install p7zip-full
-        wget -O MoonTrader-linux-x86_64.tar.7z ${dropbox_link%?}1 && 7z x MoonTrader-linux-x86_64.tar.7z
+        wget -O MoonTrader-linux-x86_64.7z ${dropbox_link%?}1 && 7z x MoonTrader-linux-x86_64.7z
     ;;
     *)
         echo "Wrong answer, exit"
@@ -32,7 +32,6 @@ case $install_type in
     ;;
 esac
 
-MTCore_path=~/MT/MTCore
 if [ -f "$MTCore_path" ]; then
     chmod +x $MTCore_path
     sudo ln -s $MTCore_path /usr/bin/MoonTrader
