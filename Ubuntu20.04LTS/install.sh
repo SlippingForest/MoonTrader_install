@@ -4,39 +4,27 @@
 sudo ufw allow 4242/udp > /dev/null 2>&1
 
 # Выбор варианта установки
-echo "Choose an installation option"
-PS3="Number: "
+PS3='Enter installation option number: '
 select install_type in "Automatic installation of the latest version" "Install your version using the Dropbox link [.tar.xz]" "Install your version using the Dropbox link [.7z]"
 do
     break
 done
 
-mt_folder="MoonTrader"
-while [ -d "$HOME/$mt_folder" ]
-do
-  	echo "[WARNING] Folder $HOME/$mt_folder already exist"
-	read -p 'Enter a new folder name: ' new_foldername
-	mt_folder=$new_foldername
-done
-mkdir "$HOME/$mt_folder"
-
 # Скачивание и установка MoonTrader
-echo "Download and unpucking MoonTrader to $HOME/$mt_folder/"
+MTCore_path=~/MT/MTCore
+mkdir MT && cd MT
 case $install_type in
     "Automatic installation of the latest version")
-        wget https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$HOME/$mt_folder"
-		rm MoonTrader-linux-x86_64.tar.xz
+        wget https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz && tar -xpJf MoonTrader-linux-x86_64.tar.xz
     ;;
     "Install your version using the Dropbox link [.tar.xz]")
         read -p 'paste DropBox link [.tar.xz]: ' dropbox_tar_link
-        wget -O MoonTrader-linux-x86_64.tar.xz ${dropbox_tar_link%?}1 && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$HOME/$mt_folder"
-		rm MoonTrader-linux-x86_64.tar.xz
+        wget -O MoonTrader-linux-x86_64.tar.xz ${dropbox_tar_link%?}1 && tar -xpJf MoonTrader-linux-x86_64.tar.xz
     ;;
     "Install your version using the Dropbox link [.7z]")
         read -p 'paste DropBox link [.7z]: ' dropbox_7z_link
-        sudo apt -yqq install p7zip-full > /dev/null 2>&1
-        wget -O MoonTrader-linux-x86_64.7z ${dropbox_7z_link%?}1 && 7z x -o"$HOME/$mt_folder" MoonTrader-linux-x86_64.7z
-		rm MoonTrader-linux-x86_64.7z
+        sudo apt -yqq install p7zip-full
+        wget -O MoonTrader-linux-x86_64.7z ${dropbox_7z_link%?}1 && 7z x MoonTrader-linux-x86_64.7z
     ;;
     *)
         echo "Wrong answer, exit"
@@ -44,11 +32,9 @@ case $install_type in
     ;;
 esac
 
-if [ -f "$HOME/$mt_folder/MTCore" ]; then
-    chmod +x "$HOME/$mt_folder/MTCore"
-	sudo rm /usr/bin/MoonTrader
-    sudo ln -s "$HOME/$mt_folder/MTCore" /usr/bin/MoonTrader
-	echo green "Update /usr/bin/MoonTrader link to $HOME/$mt_folder/MTCore"
+if [ -f "$MTCore_path" ]; then
+    chmod +x $MTCore_path
+    sudo ln -s $MTCore_path /usr/bin/MoonTrader
 else
     echo "Wrong link, exit"
     exit 1
