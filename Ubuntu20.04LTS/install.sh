@@ -4,7 +4,7 @@
 sudo ufw allow 4242/udp > /dev/null 2>&1
 clear
 # Выбор варианта установки
-echo "\e[0;32m Choose an installation option \e[0m"
+echo "Choose an installation option"
 # echo -e "${text_orange}Choose an installation option${text_dafault}"
 PS3="Number: "
 
