@@ -18,13 +18,13 @@ case $install_type in
         wget https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz && tar -xpJf MoonTrader-linux-x86_64.tar.xz
     ;;
     "Install your version using the Dropbox link [.tar.xz]")
-        read -p 'paste DropBox link [.tar.xz]: ' dropbox_link
-        wget -O MoonTrader-linux-x86_64.tar.xz ${dropbox_link%?}1 && tar -xpJf MoonTrader-linux-x86_64.tar.xz
+        read -p 'paste DropBox link [.tar.xz]: ' dropbox_tar_link
+        wget -O MoonTrader-linux-x86_64.tar.xz ${dropbox_tar_link%?}1 && tar -xpJf MoonTrader-linux-x86_64.tar.xz
     ;;
     "Install your version using the Dropbox link [.7z]")
-        read -p 'paste DropBox link [.7z]: ' dropbox_link
+        read -p 'paste DropBox link [.7z]: ' dropbox_7z_link
         sudo apt -yqq install p7zip-full
-        wget -O MoonTrader-linux-x86_64.7z ${dropbox_link%?}1 && 7z x MoonTrader-linux-x86_64.7z
+        wget -O MoonTrader-linux-x86_64.7z ${dropbox_7z_link%?}1 && 7z x MoonTrader-linux-x86_64.7z
     ;;
     *)
         echo "Wrong answer, exit"
