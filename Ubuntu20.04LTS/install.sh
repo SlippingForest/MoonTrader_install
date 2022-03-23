@@ -2,12 +2,10 @@
 
 # Разрешения проходжение трафика на порт 4242 UDP(а так же тригер ввода пароля от root если требуется)
 sudo ufw allow 4242/udp > /dev/null 2>&1
-clear
+
 # Выбор варианта установки
 echo "Choose an installation option"
-# echo -e "${text_orange}Choose an installation option${text_dafault}"
 PS3="Number: "
-
 select install_type in "Automatic installation of the latest version" "Install your version using the Dropbox link [.tar.xz]" "Install your version using the Dropbox link [.7z]"
 do
     break
@@ -16,7 +14,6 @@ done
 mt_folder="MoonTrader"
 while [ -d "$HOME/$mt_folder" ]
 do
-	clear
   	echo "[WARNING] Folder $HOME/$mt_folder already exist"
 	read -p 'Enter a new folder name: ' new_foldername
 	mt_folder=$new_foldername
