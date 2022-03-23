@@ -11,7 +11,7 @@
 
 Залогиниться по SSH. В консоль ввести команду целиком от обычного пользователя, если просит пароль для повышения прав до root - вводим.
 ```bash
-wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/Ubuntu20.04LTS/install.sh | bash
+bash <(wget -qO- https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/Ubuntu20.04LTS/install.sh)
 ```
 после выполнения, хост перезагрузится
 
