@@ -3,5 +3,8 @@
 
 По найденным ошибкам и предложениям
 
-<img src="https://user-images.githubusercontent.com/47079447/160023279-144b6ff1-ff6e-41bb-b2db-534e281a2e0d.png" width="20" height="20"> @it_ops
+
+<a href="https://t.me/it_ops">
+  <img src="https://user-images.githubusercontent.com/47079447/160023599-3b2ad536-2632-4a16-9cef-0f42930ebc8c.png" alt="HTML tutorial" style="width:35px;height:35px;">
+</a> @it_ops
 
