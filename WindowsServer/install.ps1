@@ -246,6 +246,10 @@ Get-PackageProvider -name nuget -force | Out-Null
 Install-Module PSWindowsUpdate -confirm:$false -force | Out-Null
 Get-WindowsUpdate -Install -acceptall -IgnoreReboot | Out-Null
 
+# Удаление Windows Defender
+Write-Host Uninstall Windows Defender. -ForegroundColor Green -BackgroundColor Black
+Uninstall-WindowsFeature -Name Windows-Defender
+
 # Добавление записей в реестр на основе ранее созданного списка
 Write-Host ADD registry list for improving performance -ForegroundColor Green -BackgroundColor Black
 foreach ($reg_object in $list_regCreate) {
@@ -280,10 +284,6 @@ foreach ($ScheduledTaskObject in $list_schduleDisable) {
     Write-Host Disabling scheduled task $ScheduledTaskObject[0] -ForegroundColor Cyan
     Invoke-Expression ("Disable-ScheduledTask -TaskName " + $ScheduledTaskObject[0] + ' -TaskPath ' + $ScheduledTaskObject[1])  2>&1
 }
-
-# Удаление Windows Defender
-Write-Host Uninstall Windows Defender. -ForegroundColor Green -BackgroundColor Black
-Uninstall-WindowsFeature -Name Windows-Defender
 
 # Добавление правил в FireWall для подключения к MTCore
 Write-Host FireWall Allow inbound ICMPv4. -ForegroundColor Green -BackgroundColor Black
