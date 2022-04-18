@@ -94,11 +94,11 @@ sudo apt update && sudo apt -yqq upgrade
 if ! service --status-all | grep -Fq 'fail2ban'; then    
 	sudo apt -yqq install fail2ban
 	sudo touch /etc/fail2ban/jail.local
-	sudo echo "[sshd]" >>/etc/fail2ban/jail.local
-	sudo echo "port = ssh" >>/etc/fail2ban/jail.local
-	sudo echo "findtime = 3600" >>/etc/fail2ban/jail.local
-	sudo echo "maxretry = 3" >>/etc/fail2ban/jail.local
-	sudo echo "bantime = 86400" >>/etc/fail2ban/jail.local
+	sudo bash -c 'sudo echo "[sshd]" >>/etc/fail2ban/jail.local'
+	sudo bash -c 'sudo echo "port = ssh" >>/etc/fail2ban/jail.local'
+	sudo bash -c 'sudo echo "findtime = 3600" >>/etc/fail2ban/jail.local'
+	sudo bash -c 'sudo echo "maxretry = 3" >>/etc/fail2ban/jail.local'
+	sudo bash -c 'sudo echo "bantime = 86400" >>/etc/fail2ban/jail.local'
 	sudo service fail2ban restart
 fi
 
@@ -126,7 +126,7 @@ else
         sudo chmod 600 /swapfile
         sudo mkswap /swapfile
         sudo swapon /swapfile
-        echo "/swapfile none swap sw 0 0" >>/etc/fstab
+        sudo bash -c 'echo "/swapfile none swap sw 0 0" >>/etc/fstab'
         wall "RAM < 2GB, swap enabled"
     else
         wall "RAM > 1GB, swap not need"
