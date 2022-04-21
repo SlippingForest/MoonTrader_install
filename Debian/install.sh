@@ -59,6 +59,7 @@ case $install_type in
     ;;
     "Install your version using the Dropbox link [.7z]")
         read -p 'paste DropBox link [.7z]: ' dropbox_7z_link
+	sudo apt update > /dev/null 2>&1
         sudo apt -y install p7zip-full > /dev/null 2>&1
         wget -O MoonTrader-linux-x86_64.7z ${dropbox_7z_link%?}1 && 7z x -o"$HOME/$mt_folder" MoonTrader-linux-x86_64.7z
 		rm MoonTrader-linux-x86_64.7z
