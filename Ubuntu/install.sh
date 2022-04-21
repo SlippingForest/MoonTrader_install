@@ -131,7 +131,6 @@ for pkg in "${rm_pkgs[@]}"; do
             sudo rm -rf ~/snap
             sudo rm -rf /var/snap
             sudo rm -rf /var/lib/snapd
-            sudo service fail2ban restart
         else
             sudo apt -yqq remove $pkg
         fi
