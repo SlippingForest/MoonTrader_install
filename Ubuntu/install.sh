@@ -186,9 +186,7 @@ elif [ $mt_extention == ".7z" ]; then
 fi
 if [ -f "$HOME/$mt_folder/MTCore" ]; then
     chmod +x "$HOME/$mt_folder/MTCore"
-    if [ -f "/usr/bin/MoonTrader" ]; then
-        sudo rm /usr/bin/MoonTrader
-    fi
+    sudo rm /usr/bin/MoonTrader
     sudo ln -s "$HOME/$mt_folder/MTCore" /usr/bin/MoonTrader
 fi
 color_echo green "Installing MoonTrader complete to $HOME/$mt_folder \n"
