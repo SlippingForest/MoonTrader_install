@@ -7,4 +7,4 @@
 wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/MacOS/install.sh | bash <(cat) </dev/tty
 ```
 
-# Более подробная информация будет чусть позже.
+# Более подробная информация будет чуть позже.
