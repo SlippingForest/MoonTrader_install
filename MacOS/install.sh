@@ -1,11 +1,11 @@
 #!/bin/bash
 # Функция вывода цветной консоли
 function color_echo {
-    text_red="\e[0;31m"
-    text_gold="\e[0;33m"
-    text_green="\e[0;32m"
-    text_cyan="\e[0;36m"
-    text_dafault="\e[0m"
+    text_red="\033[0;31m"
+    text_gold="\033[0;33m"
+    text_green="\033[0;32m"
+    text_cyan="\033[033;36m"
+    text_dafault="\033[0m"
     
     case $1 in
         "red")
