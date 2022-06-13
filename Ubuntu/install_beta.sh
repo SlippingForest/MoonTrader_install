@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Функция вывода цветной консоли
 function color_echo {
     text_red="\e[0;31m"
@@ -25,8 +24,9 @@ function color_echo {
 }
 
 # Выбор варианта установки
+default_user=$USER
 clear
-color_echo cyan "Choose an installation option"
+color_echo cyan "Choose an installation option. USER=${default_user}"
 PS3="Enter number option: "
 select install_type in "Automatic installation of the latest version" "Install your version using the Dropbox link [.tar.xz]" "Install your version using the Dropbox link [.7z]"
 do
@@ -69,7 +69,6 @@ do
 done
 
 # Создание папки с MoonTrader
-default_user = $USER
 mt_folder="MoonTrader"
 while [ -d "$HOME/$mt_folder" ]; do
     color_echo gold "[WARNING] Folder $HOME/$mt_folder already exist"
@@ -77,7 +76,6 @@ while [ -d "$HOME/$mt_folder" ]; do
     mt_folder=$new_foldername
 done
 mkdir "$HOME/$mt_folder"
-chown -R $default_user:$default_user "$HOME/$mt_folder"
 
 # Установка необходимых пакетов
 clear
@@ -183,13 +181,14 @@ if [ $mt_extention == ".tar.xz" ]; then
     wget -O MoonTrader-linux-x86_64.tar.xz $mt_link && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$HOME/$mt_folder"
     rm MoonTrader-linux-x86_64.tar.xz
 elif [ $mt_extention == ".7z" ]; then
-    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x -o"$HOME/$mt_folder" MoonTrader-linux-x86_64.7z
+    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x -o "$HOME/$mt_folder" MoonTrader-linux-x86_64.7z
     rm MoonTrader-linux-x86_64.7z
 fi
 if [ -f "$HOME/$mt_folder/MTCore" ]; then
     chmod +x "$HOME/$mt_folder/MTCore"
     sudo rm /usr/bin/MoonTrader
     sudo ln -s "$HOME/$mt_folder/MTCore" /usr/bin/MoonTrader
+    sudo chown -R $default_user:$default_user "$HOME/$mt_folder"
 fi
 color_echo green "Installing MoonTrader complete to $HOME/$mt_folder \n"
 
@@ -200,5 +199,5 @@ sudo apt -yqq upgrade > /dev/null 2>&1
 color_echo green "complete \n"
 
 # Перезагрузка для применения всех изменинй
-#color_echo gold "[WARNING] SERVER WILL BE RESTART"
-#sudo reboot
+# color_echo gold "[WARNING] SERVER WILL BE RESTART"
+# sudo reboot
