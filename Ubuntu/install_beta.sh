@@ -69,6 +69,7 @@ do
 done
 
 # Создание папки с MoonTrader
+default_user = $USER
 mt_folder="MoonTrader"
 while [ -d "$HOME/$mt_folder" ]; do
     color_echo gold "[WARNING] Folder $HOME/$mt_folder already exist"
@@ -76,6 +77,7 @@ while [ -d "$HOME/$mt_folder" ]; do
     mt_folder=$new_foldername
 done
 mkdir "$HOME/$mt_folder"
+chown -R $default_user:$default_user "$HOME/$mt_folder"
 
 # Установка необходимых пакетов
 clear
@@ -198,5 +200,5 @@ sudo apt -yqq upgrade > /dev/null 2>&1
 color_echo green "complete \n"
 
 # Перезагрузка для применения всех изменинй
-color_echo gold "[WARNING] SERVER WILL BE RESTART"
-sudo reboot
+#color_echo gold "[WARNING] SERVER WILL BE RESTART"
+#sudo reboot
