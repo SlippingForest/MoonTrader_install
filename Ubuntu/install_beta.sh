@@ -187,7 +187,22 @@ fi
 if [ -f "$HOME/$mt_folder/MTCore" ]; then
     chmod +x "$HOME/$mt_folder/MTCore"
     sudo rm /usr/bin/MoonTrader
-    sudo ln -s "$HOME/$mt_folder/MTCore" /usr/bin/MoonTrader
+
+# Создание файла запуска для корректоной работы MoonTrader из usr/bin
+touch $HOME/$mt_folder/start_mt.sh && chmod +x $HOME/$mt_folder/start_mt.sh
+sudo cat << EOF >> $HOME/$mt_folder/start_mt.sh
+if [ -n "\$1" ]; then
+    if [ "\$1" == "--no-update" ]; then
+        $HOME/$mt_folder/MTCore --no-update
+    else
+        $HOME/$mt_folder/MTCore
+    fi
+else 
+    $HOME/$mt_folder/MTCore
+fi
+EOF
+
+    sudo ln -s "$HOME/$mt_folder/start_mt.sh" /usr/bin/MoonTrader
     sudo chown -R $default_user:$default_user "$HOME/$mt_folder"
 fi
 color_echo green "Installing MoonTrader complete to $HOME/$mt_folder \n"
