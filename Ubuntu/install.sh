@@ -194,7 +194,7 @@ sudo cat << EOF >> $HOME/$mt_folder/start_mt.sh
 if [ -n "\$1" ]; then
     if [ "\$1" == "--no-update" ]; then
         cd $HOME/$mt_folder
-        ./MTCore $1
+        ./MTCore --no-update
     else
         cd $HOME/$mt_folder
         $HOME/$mt_folder/MTCore
