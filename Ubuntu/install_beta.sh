@@ -181,7 +181,7 @@ if [ $mt_extention == ".tar.xz" ]; then
     wget -O MoonTrader-linux-x86_64.tar.xz $mt_link && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$HOME/$mt_folder"
     rm MoonTrader-linux-x86_64.tar.xz
 elif [ $mt_extention == ".7z" ]; then
-    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x "-o$HOME/$mt_folder" MoonTrader-linux-x86_64.7z
+    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x "-o${HOME}/${mt_folder}" MoonTrader-linux-x86_64.7z
     rm MoonTrader-linux-x86_64.7z
 fi
 
@@ -218,5 +218,5 @@ sudo apt -yqq upgrade
 color_echo green "complete \n"
 
 # Перезагрузка для применения всех изменинй
-color_echo gold "[WARNING] SERVER WILL BE RESTART"
-sudo reboot
+# color_echo gold "[WARNING] SERVER WILL BE RESTART"
+# sudo reboot
