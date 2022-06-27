@@ -170,10 +170,10 @@ else
     fi
 fi
 
-# Подчищаем установленные не актуальные пакеты
-color_echo cyan "Clear packages"
-sudo apt -yqq autoremove
-color_echo green "complete \n"
+# # Подчищаем установленные не актуальные пакеты
+# color_echo cyan "Clear packages"
+# sudo apt -yqq autoremove
+# color_echo green "complete \n"
 
 # Установка MoonTrader
 color_echo cyan "Installing MoonTrader"
