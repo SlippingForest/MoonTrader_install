@@ -181,7 +181,7 @@ if [ $mt_extention == ".tar.xz" ]; then
     wget -O MoonTrader-linux-x86_64.tar.xz $mt_link && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$HOME/$mt_folder"
     rm MoonTrader-linux-x86_64.tar.xz
 elif [ $mt_extention == ".7z" ]; then
-    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x -o "$HOME/$mt_folder" MoonTrader-linux-x86_64.7z
+    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x "-o $HOME/$mt_folder" MoonTrader-linux-x86_64.7z
     rm MoonTrader-linux-x86_64.7z
 fi
 if [ -f "$HOME/$mt_folder/MTCore" ]; then

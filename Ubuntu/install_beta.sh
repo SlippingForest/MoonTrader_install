@@ -204,7 +204,6 @@ else
     $HOME/$mt_folder/MTCore
 fi
 EOF
-
     sudo ln -s "$HOME/$mt_folder/start_mt.sh" /usr/bin/MoonTrader
     sudo chown -R $default_user:$default_user "$HOME/$mt_folder"
 fi
