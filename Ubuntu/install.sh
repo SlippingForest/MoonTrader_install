@@ -80,10 +80,10 @@ mkdir "$HOME/$mt_folder"
 # Установка необходимых пакетов
 clear
 color_echo cyan "Installing packages"
-sudo apt -yqq update >/dev/null 2>&1
+sudo apt -yqq update
 add_pkgs=(fail2ban mc libncurses5 libtommath1 p7zip-full apt-transport-https dotnet-sdk-6.0)
 for pkg in "${add_pkgs[@]}"; do
-    if ! dpkg -s $pkg >/dev/null 2>&1; then
+    if ! dpkg -s $pkg; then
         color_echo green "Install $pkg"
         case $pkg in
             "fail2ban")
@@ -107,7 +107,7 @@ for pkg in "${add_pkgs[@]}"; do
                 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
                 sudo dpkg -i packages-microsoft-prod.deb
                 rm packages-microsoft-prod.deb
-                sudo apt-get update >/dev/null 2>&1
+                sudo apt-get update
                 sudo apt -yqq install $pkg
             ;;
             *)
@@ -124,7 +124,7 @@ done
 color_echo cyan "Remove packages"
 rm_pkgs=(snapd exim exim4)
 for pkg in "${rm_pkgs[@]}"; do
-    if dpkg -s $pkg >/dev/null 2>&1; then
+    if dpkg -s $pkg; then
         color_echo green "Remove $pkg"
         if [ $pkg == "snapd" ]; then
             sudo apt -yqq remove $pkg --purge
@@ -142,7 +142,7 @@ done
 
 # Разрешения проходжение трафика на порт 4242 UDP
 color_echo cyan "Firewall permissions"
-sudo ufw allow 4242/udp > /dev/null 2>&1
+sudo ufw allow 4242/udp
 color_echo green "4242/udp allowed \n"
 
 # Включение синхронизации времени
@@ -181,12 +181,13 @@ if [ $mt_extention == ".tar.xz" ]; then
     wget -O MoonTrader-linux-x86_64.tar.xz $mt_link && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$HOME/$mt_folder"
     rm MoonTrader-linux-x86_64.tar.xz
 elif [ $mt_extention == ".7z" ]; then
-    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x "-o $HOME/$mt_folder" MoonTrader-linux-x86_64.7z
+    wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x "-o${HOME}/${mt_folder}" MoonTrader-linux-x86_64.7z
     rm MoonTrader-linux-x86_64.7z
 fi
+
 if [ -f "$HOME/$mt_folder/MTCore" ]; then
-    chmod +x "$HOME/$mt_folder/MTCore"
-    sudo rm /usr/bin/MoonTrader
+chmod +x "$HOME/$mt_folder/MTCore"
+sudo rm /usr/bin/MoonTrader > /dev/null 2>&1
 
 # Создание файла запуска MTCore для корректного обновления MoonTrader при запуске из usr/bin
 touch $HOME/$mt_folder/start_mt.sh && chmod +x $HOME/$mt_folder/start_mt.sh
@@ -204,18 +205,18 @@ else
     $HOME/$mt_folder/MTCore
 fi
 EOF
-
     sudo ln -s "$HOME/$mt_folder/start_mt.sh" /usr/bin/MoonTrader
     sudo chown -R $default_user:$default_user "$HOME/$mt_folder"
 fi
+
 color_echo green "Installing MoonTrader complete to $HOME/$mt_folder \n"
 
 # Установка обновлений операционной системы
 color_echo cyan "Install updates OS, please wait..."
-sudo apt update > /dev/null 2>&1
-sudo apt -yqq upgrade > /dev/null 2>&1
+sudo apt update
+sudo apt -yqq upgrade
 color_echo green "complete \n"
 
-# Перезагрузка для применения всех изменинй
+Перезагрузка для применения всех изменинй
 color_echo gold "[WARNING] SERVER WILL BE RESTART"
 sudo reboot

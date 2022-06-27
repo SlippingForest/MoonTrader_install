@@ -217,6 +217,6 @@ sudo apt update
 sudo apt -yqq upgrade
 color_echo green "complete \n"
 
-# Перезагрузка для применения всех изменинй
-# color_echo gold "[WARNING] SERVER WILL BE RESTART"
-# sudo reboot
+Перезагрузка для применения всех изменинй
+color_echo gold "[WARNING] SERVER WILL BE RESTART"
+sudo reboot
