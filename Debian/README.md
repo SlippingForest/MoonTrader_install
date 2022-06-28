@@ -1,3 +1,4 @@
+# `СКРИПТ НА ДОРАБОТКЕ СТАВТЕ ПОКА UBUNTU 20.04`
 # MoonTrader Debian
 
 Скрипт устанавливает MoonTrader, на Debian 11
