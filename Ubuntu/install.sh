@@ -23,6 +23,20 @@ function color_echo {
     esac
 }
 
+# Проверка запуска на Ubuntu 20.04
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    if [ "$ID" = "ubuntu" ] && [ "$VERSION_ID" = "20.04" ]; then
+        color_echo green "Ubuntu 20.04 detected"
+    else
+        color_echo red "Ubuntu 20.04 not detected, exit"
+        exit 1
+    fi
+else
+    color_echo red "Ubuntu 20.04 not detected, exit"
+    exit 1
+fi
+
 # Выбор варианта установки
 default_user=$USER
 clear
