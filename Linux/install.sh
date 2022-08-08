@@ -5,9 +5,9 @@
 function color_echo {
     text_red="\e[0;31m"
     text_gold="\e[0;33m"
-    text_green="\e[0;32m"
+    text_green="\e[92m"
     text_cyan="\e[0;36m"
-    text_magenta="\e[0;35m"
+    text_magenta="\e[95m"
     text_dafault="\e[0m"
     
     case $1 in
@@ -45,13 +45,13 @@ function check_os(){
         if [ "$ID" = "debian" ]; then
             if [ "$VERSION_ID" = "10" ]; then
                 OS_NAME="Debian 10"
-                elif [ "$VERSION_ID" = "11" ]; then
+            elif [ "$VERSION_ID" = "11" ]; then
                 OS_NAME="Debian 11"
             fi
-            elif [ "$ID" = "ubuntu" ]; then
+        elif [ "$ID" = "ubuntu" ]; then
             if [ "$VERSION_ID" = "20.04" ]; then
                 OS_NAME="Ubuntu 20.04"
-                elif [ "$VERSION_ID" = "22.04" ]; then
+            elif [ "$VERSION_ID" = "22.04" ]; then
                 OS_NAME="Ubuntu 22.04"
             fi
         else
@@ -220,11 +220,11 @@ function install_packages(){
                 "dotnet-sdk-6.0")
                     if [ "$OS_NAME" == "Debian 10" ]; then
                         wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-                        elif [ "$OS_NAME" == "Debian 11" ]; then
+                    elif [ "$OS_NAME" == "Debian 11" ]; then
                         wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-                        elif [ "$OS_NAME" == "Ubuntu 20.04" ]; then
+                    elif [ "$OS_NAME" == "Ubuntu 20.04" ]; then
                         wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-                        elif [ "$OS_NAME" == "Ubuntu 22.04" ]; then
+                    elif [ "$OS_NAME" == "Ubuntu 22.04" ]; then
                         wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
                     fi
                     dpkg -i packages-microsoft-prod.deb
@@ -238,7 +238,7 @@ function install_packages(){
             esac
             color_echo green "complete \n"
         else
-            color_echo green "$pkg already installed"
+            color_echo green "$pkg already installed \n"
         fi
     done
 }
@@ -260,7 +260,7 @@ function remove_packages(){
             fi
             color_echo green "complete \n"
         else
-            color_echo green "$pkg already removed"
+            color_echo green "$pkg already removed \n"
         fi
     done
 }
@@ -331,7 +331,7 @@ function install_mt(){
     if [ $mt_extention == ".tar.xz" ]; then
         wget -O MoonTrader-linux-x86_64.tar.xz $mt_link && tar -xpJf MoonTrader-linux-x86_64.tar.xz -C "$default_user_directory/$mt_folder"
         rm MoonTrader-linux-x86_64.tar.xz
-        elif [ $mt_extention == ".7z" ]; then
+    elif [ $mt_extention == ".7z" ]; then
         wget -O MoonTrader-linux-x86_64.7z $mt_link && 7z x "-o${default_user_directory}/${mt_folder}" MoonTrader-linux-x86_64.7z
         rm MoonTrader-linux-x86_64.7z
     fi
@@ -376,6 +376,14 @@ enable_swap
 setup_firewall
 install_mt
 
-color_echo title "### Installation completed, server will be restarted ###"
+color_echo title "Installation completed"
+color_echo green "Operation System: $OS_NAME"
+color_echo green "User(Last SSH connect): $default_user"
+color_echo green "Installation directory: $default_user_directory"
+color_echo green "MoonTrader directory: $default_user_directory/$mt_folder"
+color_echo green "Start command: MoonTrader"
+color_echo green "Please use tmux to run MoonTrader"
+
+color_echo title "### Server will be restarted ###"
 # Перезагрузка для применения всех изменинй
 systemctl reboot
