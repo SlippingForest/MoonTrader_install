@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Функция вывода цветной консоли
+# ToDo: сделать возможность отображения отдельных слов, вывод ошибкок и прочего
 function color_echo {
     text_red="\e[0;31m"
     text_gold="\e[0;33m"
@@ -54,7 +55,7 @@ function check_os(){
                 OS_NAME="Ubuntu 22.04"
             fi
         else
-            color_echo red "This script must be run on Debian or Ubuntu"
+            color_echo red "This script must be run on Debian10+ or Ubuntu20+"
             exit 1
         fi
         color_echo title "###  Operation System: $OS_NAME  ###"
@@ -66,13 +67,15 @@ function check_os(){
 function check_root {
     if [ "$(id -u)" != "0" ]; then
         if [[ $OS_NAME == *"Debian"* ]]; then
-            color_echo red "This script must be run as root"
-            color_echo gold "Try with: su -"
+            color_echo gold "This script must be run as root, try:"
+            color_echo cyan "su -"
+            color_echo red "Exiting..."
             exit 1
         fi
         if [[ $OS_NAME == *"Ubuntu"* ]]; then
-            color_echo red "This script must be run as root"
-            color_echo gold "Try with: sudo su"
+            color_echo gold "This script must be run as root, try:"
+            color_echo cyan "sudo su"
+            color_echo red "Exiting..."
             exit 1
         fi
     fi
@@ -82,47 +85,55 @@ function check_root {
 # Return
 # default_user - user
 # default_user_directory - home directory of default_user
-function choose_user() {
+function select_user() {
     color_echo title "Select installation user"
-    list_usrers=($(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | paste -sd " "))
-    color_echo magenta "Select the user with which you connected via SSH"
-    color_echo magenta "Выберите пользователя с помощью которого подключались по SSH"
-    PS3='Enter number of user/Введите номер пользователя: '
-    select default_user in "${list_usrers[@]}" "root" "Exit"
-    do
-        case $default_user in
-            "root")
-                default_user_directory=$(eval echo ~$USER)
-                break
-            ;;
-            $default_user)
-                default_user_directory=$(eval echo ~$default_user)
-                break
-            ;;
-            "Exit")
-                exit 1
-            ;;
-        esac
-    done
-    color_echo green "Default user: $default_user"
-    color_echo green "Default user directory: $default_user_directory"
+    default_user=$(last pts/0 -1 | awk '{print $1; exit}')
+    default_user_directory=$(eval echo ~$default_user)
+    color_echo green "user: $default_user"
+    color_echo green "user directory: $default_user_directory"
 }
+# function select_user() {
+#     color_echo title "Select installation user"
+#     last_login_user=$(last pts/0 -1 | awk '{print $1; exit}')
+#     list_usrers=($(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | paste -sd " "))
+#     color_echo magenta "Select the user with which you connected via SSH"
+#     color_echo magenta "Выберите пользователя с помощью которого подключались по SSH"
+#     color_echo gold "Last login user: $last_login_user"
+#     PS3='Enter number of user/Введите номер пользователя: '
+#     select default_user in "${list_usrers[@]}" "root" "Exit"
+#     do
+#         case $default_user in
+#             "root")
+#                 default_user_directory=$(eval echo ~$USER)
+#                 break
+#             ;;
+#             $default_user)
+#                 default_user_directory=$(eval echo ~$default_user)
+#                 break
+#             ;;
+#             "Exit")
+#                 exit 1
+#             ;;
+#         esac
+#     done
+#     color_echo green "Default user: $default_user"
+#     color_echo green "Default user directory: $default_user_directory"
+# }
 
 
 # Выбор способа установки
 # Return
 # mt_link - installation archive link
 # mt_extension - installation archive extension
-function choose_install_type(){
+function select_installation(){
     color_echo title "Select installation type"
     install_type_list=(
         "Automatic installation of the latest version"
-        "Install your version using the Dropbox link [.tar.xz]"
-        "Install your version using the Dropbox link [.7z]"
+        "Install using the Dropbox link [.tar.xz]"
+        "Install using the Dropbox link [.7z]"
         "Exit"
     )
     color_echo magenta "Select installation option"
-    color_echo magenta "Выберите вариант установки"
     PS3="Enter number option: "
     select install_type in "${install_type_list[@]}"
     do
@@ -132,7 +143,8 @@ function choose_install_type(){
                 mt_extention=".tar.xz"
                 break
             ;;
-            "Install your version using the Dropbox link [.tar.xz]")
+            "Install using the Dropbox link [.tar.xz]")
+                color_echo gold "[EXAMPLE] https://www.dropbox.com/s/.../archive_name.tar.xz?dl=0"
                 read -p "paste DropBox link [.tar.xz]: " mt_link
                 while ! [[ $mt_link == *".tar.xz"* ]]; do
                     clear
@@ -144,7 +156,8 @@ function choose_install_type(){
                 mt_extention=".tar.xz"
                 break
             ;;
-            "Install your version using the Dropbox link [.7z]")
+            "Install using the Dropbox link [.7z]")
+                color_echo gold "[EXAMPLE] https://www.dropbox.com/s/.../archive_name.7z?dl=0"
                 read -p "paste DropBox link [.7z]: " mt_link
                 while ! [[ $mt_link == *".7z"* ]]; do
                     clear
@@ -165,13 +178,13 @@ function choose_install_type(){
             ;;
         esac
     done
-    color_echo green "You choose: $install_type"
+    color_echo green "Install type: $install_type"
     color_echo green "Install link: $mt_link"
 }
 
 function install_packages(){
     # Установка пакетов
-    color_echo title "Install packages"
+    color_echo title "Installing requaired packages"
     apt update > /dev/null 2>&1
     add_pkgs=(
         fail2ban
@@ -232,7 +245,7 @@ function install_packages(){
 
 function remove_packages(){
     # Удаление ненужных пакетов
-    color_echo title "Remove packages"
+    color_echo title "Removing unused packages"
     rm_pkgs=(snapd exim exim4)
     for pkg in "${rm_pkgs[@]}"; do
         if dpkg -s $pkg > /dev/null 2>&1; then
@@ -254,7 +267,7 @@ function remove_packages(){
 
 function update_packages(){
     # Обновление пакетов
-    color_echo title "Update packages"
+    color_echo title "Updating packages"
     apt update > /dev/null 2>&1
     DEBIAN_FRONTEND=noninteractive apt upgrade -y
     color_echo green "Updating packages complete"
@@ -262,7 +275,7 @@ function update_packages(){
 
 function create_mt_folder(){
     # Создание папки с MoonTrader
-    color_echo title "Create MoonTrader folder"
+    color_echo title "Createing MoonTrader directory"
     mt_folder="MoonTrader"
     while [ -d "$default_user_directory/$mt_folder" ]; do
         color_echo gold "[WARNING] Folder $default_user_directory/$mt_folder already exist"
@@ -270,12 +283,12 @@ function create_mt_folder(){
         mt_folder=$new_foldername
     done
     mkdir "$default_user_directory/$mt_folder"
-    color_echo green "MoonTrader installation folder $default_user_directory/$mt_folder created"
+    color_echo green "MoonTrader directory: $default_user_directory/$mt_folder"
 }
 
 function enable_swap(){
     # Включение swap если он выключен и RAM меньше 2Gb
-    color_echo title "Enable swap"
+    color_echo title "Enabling swap"
     if free | awk '/^Swap:/ {exit !$2}'; then
         color_echo green "swap already enabled \n"
     else
@@ -294,8 +307,8 @@ function enable_swap(){
 
 # Включение и настройка firewall
 function setup_firewall(){
-    color_echo title "Enable firewall"
-    if ! iptables -nL | grep 4242; then
+    color_echo title "Enabling firewall"
+    if ! iptables -nL | grep 4242 > /dev/null 2>&1; then
         iptables -F
         iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
         iptables -A INPUT -m state --state INVALID -j DROP
@@ -327,7 +340,7 @@ function install_mt(){
     if [ -f "$default_user_directory/$mt_folder/MTCore" ] && [ ! -f "$default_user_directory/$mt_folder/start_mt.sh" ]; then
         chmod +x "$default_user_directory/$mt_folder/MTCore"
         touch $default_user_directory/$mt_folder/start_mt.sh && chmod +x $default_user_directory/$mt_folder/start_mt.sh
-        # ToDo сделать запись строк в файл как-то по красивее...
+        # ToDo сделать запись строк в файл как-то красивее...
         echo -e "if [ -n \"\$1\" ]; then" > $default_user_directory/$mt_folder/start_mt.sh
         echo -e "    if [ \"\$1\" == \"--no-update\" ]; then" >> $default_user_directory/$mt_folder/start_mt.sh
         echo -e "        cd $default_user_directory/$mt_folder" >> $default_user_directory/$mt_folder/start_mt.sh
@@ -353,8 +366,8 @@ function install_mt(){
 clear
 check_os
 check_root
-choose_user
-choose_install_type
+select_user
+select_installation
 create_mt_folder
 remove_packages
 install_packages
@@ -363,7 +376,6 @@ enable_swap
 setup_firewall
 install_mt
 
-color_echo title "### Install complete ###"
+color_echo title "### Installation completed, server will be restarted ###"
 # Перезагрузка для применения всех изменинй
-color_echo gold "[WARNING] SERVER WILL BE RESTART"
 systemctl reboot
