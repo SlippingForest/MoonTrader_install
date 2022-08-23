@@ -202,26 +202,11 @@ function install_packages() {
         if ! dpkg -s $pkg >/dev/null 2>&1; then
             color_echo green "Install $pkg"
             case $pkg in
-            "chrony")
-                apt install -y $pkg
-                echo -e "server 0.jp.pool.ntp.org iburst" > /etc/chrony/chrony.conf
-                echo -e "server 1.jp.pool.ntp.org iburst" >> /etc/chrony/chrony.conf
-                echo -e "server 2.jp.pool.ntp.org iburst" >> /etc/chrony/chrony.conf
-                echo -e "server 3.jp.pool.ntp.org iburst" >> /etc/chrony/chrony.conf
-                echo -e "minsources 3" >> /etc/chrony/chrony.conf
-                echo -e "maxchange 100 0 0" >> /etc/chrony/chrony.conf
-                echo -e "makestep 0.001 1" >> /etc/chrony/chrony.conf
-                echo -e "maxdrift 100" >> /etc/chrony/chrony.conf
-                echo -e "maxslewrate 100" >> /etc/chrony/chrony.conf
-                echo -e "driftfile /var/lib/chrony/drift" >> /etc/chrony/chrony.conf
-                echo -e "rtcsync" >> /etc/chrony/chrony.conf
-                service chrony restart
-                ;;
             "fail2ban")
                 apt install -y $pkg
                 touch /etc/fail2ban/jail.local
                 echo -e "[sshd]\nport = ssh\nfindtime = 3600\nmaxretry = 3\nbantime = 86400" >/etc/fail2ban/jail.local
-                service fail2ban restart
+                systemctl restart fail2ban
                 ;;
             "libtommath1")
                 apt install -y $pkg
@@ -318,6 +303,24 @@ function enable_swap() {
     fi
 }
 
+# Настройка конфигурации chrony(время)
+function setup_time() {
+    color_echo title "Configuring time servers"
+    echo -e "server 0.pool.ntp.org iburst" >/etc/chrony/chrony.conf
+    echo -e "server 1.pool.ntp.org iburst" >>/etc/chrony/chrony.conf
+    echo -e "server 2.pool.ntp.org iburst" >>/etc/chrony/chrony.conf
+    echo -e "server 3.pool.ntp.org iburst" >>/etc/chrony/chrony.conf
+    echo -e "minsources 4" >>/etc/chrony/chrony.conf
+    echo -e "maxchange 100 0 0" >>/etc/chrony/chrony.conf
+    echo -e "makestep 0.001 1" >>/etc/chrony/chrony.conf
+    echo -e "maxdrift 100" >>/etc/chrony/chrony.conf
+    echo -e "maxslewrate 100" >>/etc/chrony/chrony.conf
+    echo -e "driftfile /var/lib/chrony/drift" >>/etc/chrony/chrony.conf
+    echo -e "rtcsync" >>/etc/chrony/chrony.conf
+    systemctl restart chronyd
+    color_echo green "Configuring time(chrony) complete"
+}
+
 # Включение и настройка firewall
 function setup_firewall() {
     color_echo title "Enabling firewall"
@@ -335,7 +338,6 @@ function setup_firewall() {
     else
         color_echo green "Security already enabled"
     fi
-
 }
 
 function install_mt() {
@@ -386,6 +388,7 @@ remove_packages
 install_packages
 update_packages
 enable_swap
+setup_time
 setup_firewall
 install_mt
 
