@@ -330,6 +330,7 @@ function setup_firewall() {
         iptables -A INPUT -m state --state INVALID -j DROP
         iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT
         iptables -A INPUT -p udp --dport 4242 -j ACCEPT
+        iptables -A INPUT -p tcp --dport 48620 -j ACCEPT
         iptables -A INPUT -p tcp --dport ssh -j ACCEPT
         iptables -A INPUT -i lo -j ACCEPT
         iptables -A INPUT -j DROP
