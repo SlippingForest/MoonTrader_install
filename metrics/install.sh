@@ -45,7 +45,7 @@ if [ ! -d "$metrics_folder" ]; then
 
     if [ ! -f "$metrics_executable" ]; then
         echo "File $metrics_executable does not exists, download"
-        wget -O $metrics_executable "https://www.dropbox.com/s/knr91osy2cxzkuo/mt_metrics?dl=1"
+        wget -O $metrics_executable "https://www.dropbox.com/s/jrnqjult3j2bitq/moontrader_metrics?dl=1"
         chmod +x $metrics_executable
     fi
 
