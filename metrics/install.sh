@@ -5,9 +5,9 @@ if [ "$EUID" -ne 0 ]; then
     exit
 fi
 
+clear
 read -p "source link: " installer_link
 while ! [[ $installer_link == *"dl=0"* ]]; do
-    clear
     echo "[ERROR] Wrong link"
     echo "[EXAMPLE] https://www.dropbox.com/s/.../...?dl=0"
     read -p "paste DropBox link [?dl=0]: " mt_link
