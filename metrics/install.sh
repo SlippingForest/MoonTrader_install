@@ -5,6 +5,15 @@ if [ "$EUID" -ne 0 ]; then
     exit
 fi
 
+read -p "source link: " installer_link
+while ! [[ $installer_link == *"dl=0"* ]]; do
+    clear
+    echo "[ERROR] Wrong link"
+    echo "[EXAMPLE] https://www.dropbox.com/s/.../...?dl=0"
+    read -p "paste DropBox link [?dl=0]: " mt_link
+done
+installer_link=${installer_link%?}1
+
 service_name="mtcore-metrics.service"
 
 default_user=$(last pts/0 -1 | awk '{print $1; exit}')
@@ -45,7 +54,7 @@ if [ ! -d "$metrics_folder" ]; then
 
     if [ ! -f "$metrics_executable" ]; then
         echo "File $metrics_executable does not exists, download"
-        wget -O $metrics_executable "https://www.dropbox.com/s/jrnqjult3j2bitq/moontrader_metrics?dl=1"
+        wget -O $metrics_executable $installer_link
         chmod +x $metrics_executable
     fi
 
