@@ -8,9 +8,10 @@ fi
 clear
 read -p "source link: " installer_link
 while ! [[ $installer_link == *"dl=0"* ]]; do
+    clear
     echo "[ERROR] Wrong link"
     echo "[EXAMPLE] https://www.dropbox.com/s/.../...?dl=0"
-    read -p "paste DropBox link [?dl=0]: " mt_link
+    read -p "paste DropBox link [?dl=0]: " installer_link
 done
 installer_link=${installer_link%?}1
 
@@ -40,9 +41,9 @@ if dpkg -s iptables-persistent >/dev/null 2>&1; then
         iptables -A INPUT -i lo -j ACCEPT
         iptables -A INPUT -j DROP
         netfilter-persistent save
-        echo green "Firewall allow tcp22, udp4242, tcp48620. Drop all other connections"
+        echo "Firewall allow tcp22, udp4242, tcp48620. Drop all other connections"
     else
-        echo green "Security already enabled"
+        echo "Security already enabled"
     fi
 else
     echo "iptables-persistent not installed"
