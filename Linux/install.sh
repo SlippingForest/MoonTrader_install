@@ -290,16 +290,12 @@ function enable_swap() {
     if free | awk '/^Swap:/ {exit !$2}'; then
         color_echo green "swap already enabled \n"
     else
-        if [ $(awk '/^MemTotal:/{print $2}' /proc/meminfo) -lt 2030664 ]; then
-            sudo fallocate -l 2G /swapfile
-            sudo chmod 600 /swapfile
-            sudo mkswap /swapfile
-            sudo swapon /swapfile
-            sudo bash -c 'echo "/swapfile none swap sw 0 0" >>/etc/fstab'
-            color_echo green "RAM < 2GB, swap enabled"
-        else
-            color_echo green "RAM > 1GB, swap not needed"
-        fi
+        fallocate -l 2G /swapfile
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+        bash -c 'echo "/swapfile none swap sw 0 0" >>/etc/fstab'
+        color_echo green "swap enabled"
     fi
 }
 
