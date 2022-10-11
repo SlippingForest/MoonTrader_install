@@ -87,7 +87,14 @@ function check_root {
 # default_user_directory - home directory of default_user
 function select_user() {
     color_echo title "Select installation user"
-    default_user=$(last pts/0 -1 | awk '{print $1; exit}')
+    last_login_user=$(last pts/0 -1 | awk '{print $1; exit}')
+    list_usrers=($(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd | paste -sd " "))
+    for list_user in "${list_usrers[@]}" "root"; do
+        if [[ "$list_user" == *"$last_login_user"* ]]; then
+            default_user=$list_user
+            break
+        fi
+    done
     default_user_directory=$(eval echo ~$default_user)
     color_echo green "user: $default_user"
     color_echo green "user directory: $default_user_directory"
