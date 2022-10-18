@@ -21,7 +21,10 @@
 <img src="https://user-images.githubusercontent.com/47079447/159792911-c469d0ca-2f3d-4919-9f23-2c1f21688196.gif">
 </p>
 
-2. Вставить команду целиком и запустить
+2. Вставить и запустить команды:
+```bash
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+```
 ```bash
 iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/WindowsServer/install.ps1'))
 ```
