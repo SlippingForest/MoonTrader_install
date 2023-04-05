@@ -1,6 +1,7 @@
 # MoonTrader Linux
 
 Скрипт установки на Ubuntu 20.04/Ubuntu 22.04/Debian 10/Debian 11
+- Переведен на 4 языка: Английский, Русский, Украинский, Испанский
 - Проверен на AWS, Vultr, стандартные образы
 - Возможность установки с помощью ссылки установочного архива размещенного в облаке https://www.dropbox.com/
   - Пример: https://www.dropbox.com/s/.../MoonTrader-linux-version.tar.xz?dl=0
@@ -52,11 +53,17 @@ killall MTCore
 ```
 
 # Пути к файлам MoonTrader
-Стандартные каталоги
+Каталог с ядром
 ```bash
 cd ~/MoonTrader
 ```
 Каталог с конфигом
 ```bash
 cd ~/.config/moontrader-data/
+```
+
+# Отблагодарить автора
+USDT TRC20
+```bash
+TNtNVN8mjbCGiYYgsVMRHtW5a593DP9E3p
 ```
