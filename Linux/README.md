@@ -62,7 +62,7 @@ cd ~/MoonTrader
 cd ~/.config/moontrader-data/
 ```
 
-# Отблагодарить автора
+# Угостить кофем
 USDT TRC20
 ```bash
 TNtNVN8mjbCGiYYgsVMRHtW5a593DP9E3p
