@@ -7,6 +7,7 @@
   - Пример: https://www.dropbox.com/s/.../MoonTrader-linux-version.tar.xz?dl=0
 
 # Важно к прочтению: 
+- Установка только на стандартный образ Ubuntu 20.04/Ubuntu 22.04/Debian 10/Debian 11, если что-то меняли(к примеру порты) в образе, то скрипт может не сработать.
 - Для любителей открывать доступ с любого IP в FireWall - добавлена установка fail2ban, для защиты перебора паролей SSH. Три не верные попытки входа, блокировка доступа к SSH по IP на сутки.
 
 # Установка
@@ -60,10 +61,4 @@ cd ~/MoonTrader
 Каталог с конфигом
 ```bash
 cd ~/.config/moontrader-data/
-```
-
-# Угостить кофем
-USDT TRC20
-```bash
-TNtNVN8mjbCGiYYgsVMRHtW5a593DP9E3p
 ```

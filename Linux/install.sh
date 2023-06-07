@@ -376,15 +376,22 @@ function update_packages() {
 
 # Функция создания папки с MoonTrader
 function create_mt_folder() {
+#   mt_folder="MoonTrader"
+#   while [ -d "$default_user_directory/$mt_folder" ]; do
+#     color_echo warning "$(display_hint "h_create_mt_folder_already_exist"): $default_user_directory/$mt_folder"
+#     color_echo example "MoonTrader1"
+#     read -p "$(display_hint "h_create_mt_folder_new"): " new_foldername
+#     if [[ -n "$new_foldername" ]]; then
+#       mt_folder=$new_foldername
+#     fi
+#   done
+#   mkdir "$default_user_directory/$mt_folder"
+#   color_echo title "$(display_hint "h_create_mt_folder_install"): $default_user_directory/$mt_folder"
+# }
   mt_folder="MoonTrader"
-  while [ -d "$default_user_directory/$mt_folder" ]; do
-    color_echo warning "$(display_hint "h_create_mt_folder_already_exist"): $default_user_directory/$mt_folder"
-    color_echo example "MoonTrader1"
-    read -p "$(display_hint "h_create_mt_folder_new"): " new_foldername
-    if [[ -n "$new_foldername" ]]; then
-      mt_folder=$new_foldername
-    fi
-  done
+  if [ -d "$default_user_directory/$mt_folder" ]; then
+    rm -rf "$default_user_directory/$mt_folder"
+  fi
   mkdir "$default_user_directory/$mt_folder"
   color_echo title "$(display_hint "h_create_mt_folder_install"): $default_user_directory/$mt_folder"
 }
