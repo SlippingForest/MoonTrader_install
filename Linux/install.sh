@@ -6,6 +6,9 @@ declare -A hints=(
   ["h_check_os_valid"]='{"en":"Current operating system","ua":"Поточна операційна система","ru":"Текущая операционная система","es":"Sistema operativo actual"}'
   ["h_check_os_wrong"]='{"en":"This script only supports Debian10+ and Ubuntu20+ operating systems","ua":"Цей скрипт підтримує тільки операційні системи Debian10+ і Ubuntu20+","ru":"Этот скрипт поддерживает только операционные системы Debian10+ и Ubuntu20+","es":"Este script solo es compatible con los sistemas operativos Debian10+ y Ubuntu20+"}'
 
+  ["h_check_arch_wrong"]='{"en":"This script only supports AMD64 and ARM architectures","ua":"Цей скрипт підтримує тільки архітектури AMD64 і ARM","ru":"Этот скрипт поддерживает только архитектуры AMD64 и ARM","es":"Este script solo es compatible con las arquitecturas AMD64 y ARM"}'
+  ["h_check_arch_valid"]='{"en":"Current architecture","ua":"Поточна архітектура","ru":"Текущая архитектура","es":"Arquitectura actual"}'
+
   ["h_check_root_wrong"]='{"en":"This script must be run as root","ua":"Цей скрипт має бути виконаний від імені користувача root","ru":"Этот скрипт должен выполнятся от пользователя root","es":"Este script debe ejecutarse como root"}'
 
   ["h_exit_error"]='{"en":"Script stopped.","ua":"Скрипт зупинено.","ru":"Скрипт остановлен.","es":"Script detenido."}'
@@ -202,6 +205,19 @@ function check_os() {
   fi
 }
 
+function check_arch() {
+  if [ "$(uname -m)" == "x86_64" ]; then
+    CPU_ARCH="AMD64"
+  elif [ "$(uname -m)" == "aarch64" ]; then
+    CPU_ARCH="ARM"
+  else
+    color_echo error "$(display_hint "h_check_arch_wrong")"
+    exit 1
+  fi
+
+  color_echo title "$(display_hint "h_check_arch_valid"): $CPU_ARCH"
+}
+
 # Функция проверки на запуск от root
 function check_root {
   if [ "$(id -u)" != "0" ]; then
@@ -253,7 +269,12 @@ function select_installation() {
   select install_type in "${install_type_list[@]}"; do
     case $install_type in
     "$(display_hint "h_select_installation_auto")")
-      mt_link="https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz"
+      if [ $CPU_ARCH == "AMD64" ]; then
+        mt_link="https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz"
+      elif [ $CPU_ARCH == "ARM" ]; then
+        mt_link="https://cdn3.moontrader.com/beta/linux-arm64/MoonTrader-linux-arm64.tar.xz"
+      fi
+
       mt_extention=".tar.xz"
       break
       ;;
@@ -286,7 +307,20 @@ function select_installation() {
 # Функция установки пакетов и зависимостей
 function install_packages() {
   color_echo title "$(display_hint "h_install_packages_title")"
+
+  if [ "$OS_NAME" == "Debian 10" ]; then
+    wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+  elif [ "$OS_NAME" == "Debian 11" ]; then
+    wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+  elif [ "$OS_NAME" == "Ubuntu 20.04" ]; then
+    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+  elif [ "$OS_NAME" == "Ubuntu 22.04" ]; then
+    wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+  fi
+  dpkg -i packages-microsoft-prod.deb
+  rm packages-microsoft-prod.deb
   apt update >/dev/null 2>&1
+
   add_pkgs=(
     fail2ban
     chrony
@@ -300,7 +334,9 @@ function install_packages() {
     p7zip-full
     apt-transport-https
     dotnet-sdk-6.0
+    dotnet-sdk-7.0
   )
+
   for pkg in "${add_pkgs[@]}"; do
     if ! dpkg -s $pkg >/dev/null 2>&1; then
       color_echo info "$(display_hint "h_install_packages_start"): $pkg"
@@ -318,26 +354,11 @@ function install_packages() {
         fi
         ln -s libtommath.so.1 /usr/lib/x86_64-linux-gnu/libtommath.so.0
         ;;
-      "dotnet-sdk-6.0")
-        if [ "$OS_NAME" == "Debian 10" ]; then
-          wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        elif [ "$OS_NAME" == "Debian 11" ]; then
-          wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        elif [ "$OS_NAME" == "Ubuntu 20.04" ]; then
-          wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        elif [ "$OS_NAME" == "Ubuntu 22.04" ]; then
-          wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        fi
-        dpkg -i packages-microsoft-prod.deb
-        rm packages-microsoft-prod.deb
-        apt update
-        apt install -y dotnet-sdk-6.0
-        ;;
       *)
         DEBIAN_FRONTEND=noninteractive apt install -y $pkg
         ;;
       esac
-      color_echo info "$(display_hint "h_install_packages_complete"): $pkg"
+      color_echo info "$(display_hint "h_install_packages_comlpete"): $pkg"
     else
       color_echo info "$(display_hint "h_install_packages_already"): $pkg"
     fi
@@ -376,18 +397,6 @@ function update_packages() {
 
 # Функция создания папки с MoonTrader
 function create_mt_folder() {
-#   mt_folder="MoonTrader"
-#   while [ -d "$default_user_directory/$mt_folder" ]; do
-#     color_echo warning "$(display_hint "h_create_mt_folder_already_exist"): $default_user_directory/$mt_folder"
-#     color_echo example "MoonTrader1"
-#     read -p "$(display_hint "h_create_mt_folder_new"): " new_foldername
-#     if [[ -n "$new_foldername" ]]; then
-#       mt_folder=$new_foldername
-#     fi
-#   done
-#   mkdir "$default_user_directory/$mt_folder"
-#   color_echo title "$(display_hint "h_create_mt_folder_install"): $default_user_directory/$mt_folder"
-# }
   mt_folder="MoonTrader"
   if [ -d "$default_user_directory/$mt_folder" ]; then
     rm -rf "$default_user_directory/$mt_folder"
@@ -484,6 +493,7 @@ main
 clear
 select_language
 check_os
+check_arch
 check_root
 select_user
 select_installation
@@ -493,7 +503,7 @@ install_packages
 update_packages
 enable_swap
 setup_time
-setup_firewall
+#setup_firewall
 install_mt
 
 clear
