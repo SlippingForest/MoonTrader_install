@@ -503,7 +503,7 @@ install_packages
 update_packages
 enable_swap
 setup_time
-#setup_firewall
+setup_firewall
 install_mt
 
 clear
