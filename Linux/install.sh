@@ -349,10 +349,19 @@ function install_packages() {
         ;;
       "libtommath1")
         apt install -y $pkg
-        if [ -f "/usr/lib/x86_64-linux-gnu/libtommath.so.0" ]; then
-          rm /usr/lib/x86_64-linux-gnu/libtommath.so.0
+
+        if [ $CPU_ARCH == "AMD64" ]; then
+          if [ -f "/usr/lib/x86_64-linux-gnu/libtommath.so.0" ]; then
+            rm /usr/lib/x86_64-linux-gnu/libtommath.so.0
+          fi
+          ln -s libtommath.so.1 /usr/lib/x86_64-linux-gnu/libtommath.so.0
+        elif [ $CPU_ARCH == "ARM" ]; then
+          if [ -f "/usr/lib/aarch64-linux-gnu/libtommath.so.0" ]; then
+            rm /usr/lib/x86_64-linux-gnu/libtommath.so.0
+          fi
+          ln -s libtommath.so.1 /usr/lib/aarch64-linux-gnu/libtommath.so.0
         fi
-        ln -s libtommath.so.1 /usr/lib/x86_64-linux-gnu/libtommath.so.0
+
         ;;
       *)
         DEBIAN_FRONTEND=noninteractive apt install -y $pkg
