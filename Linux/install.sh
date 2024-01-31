@@ -427,6 +427,9 @@ function enable_swap() {
 
 # Функция настройки конфигурации chrony(время)
 function setup_time() {
+  # set timezone UTC+0
+  timedatectl set-timezone Etc/UTC
+  # chrony setup
   echo -e "server 0.pool.ntp.org iburst" >/etc/chrony/chrony.conf
   echo -e "server 1.pool.ntp.org iburst" >>/etc/chrony/chrony.conf
   echo -e "server 2.pool.ntp.org iburst" >>/etc/chrony/chrony.conf
