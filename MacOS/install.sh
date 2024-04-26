@@ -26,7 +26,7 @@ function color_echo {
 # Выбор варианта установки
 clear
 color_echo cyan "Automatic installation of the latest version"
-mt_link="https://cdn3.moontrader.com/beta/macosx-x86_64/MoonTrader-macosx-x86_64.tar.xz"
+mt_link="https://cdn3.moontrader.io/beta/macosx-x86_64/MoonTrader-macosx-x86_64.tar.xz"
 mt_extention=".tar.xz"
 
 
