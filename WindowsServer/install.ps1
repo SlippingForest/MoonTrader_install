@@ -215,7 +215,7 @@ function func_install_MoonTrader {
         Write-Host Install MoonTrader -ForegroundColor Green -BackgroundColor Black
         if (-Not (Test-Path MoonTrader-sfx.exe -PathType Leaf)) {
             Write-Host Download MoonTrader -ForegroundColor Cyan
-            Invoke-WebRequest -O MoonTrader-sfx.exe "https://cdn3.moontrader.io/beta/windows-x86_64/MoonTrader-sfx.exe"
+            Invoke-WebRequest -O MoonTrader-sfx.exe "https://cdn3.moontrader.com/beta/windows-x86_64/MoonTrader-sfx.exe"
         }
 
         if (-Not (Test-Path -Path "$mt_folder\MoonTrader-sfx.exe" -PathType Leaf)) {

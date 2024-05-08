@@ -270,9 +270,9 @@ function select_installation() {
     case $install_type in
     "$(display_hint "h_select_installation_auto")")
       if [ $CPU_ARCH == "AMD64" ]; then
-        mt_link="https://cdn3.moontrader.io/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz"
+        mt_link="https://cdn3.moontrader.com/beta/linux-x86_64/MoonTrader-linux-x86_64.tar.xz"
       elif [ $CPU_ARCH == "ARM" ]; then
-        mt_link="https://cdn3.moontrader.io/beta/linux-arm64/MoonTrader-linux-arm64.tar.xz"
+        mt_link="https://cdn3.moontrader.com/beta/linux-arm64/MoonTrader-linux-arm64.tar.xz"
       fi
 
       mt_extention=".tar.xz"
