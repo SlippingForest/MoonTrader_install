@@ -223,13 +223,11 @@ function check_root {
   if [ "$(id -u)" != "0" ]; then
     if [[ $OS_NAME == *"Debian"* ]]; then
       color_echo error "$(display_hint "h_check_root_wrong")"
-      # color_echo cyan "su -"
       color_echo info "$(display_hint "h_exit_error")"
       exit 1
     fi
     if [[ $OS_NAME == *"Ubuntu"* ]]; then
       color_echo error "$(display_hint "h_check_root_wrong")"
-      # color_echo cyan "sudo su"
       color_echo info "$(display_hint "h_exit_error")"
       exit 1
     fi
@@ -335,6 +333,7 @@ function install_packages() {
     apt-transport-https
     dotnet-sdk-6.0
     dotnet-sdk-7.0
+    dotnet-sdk-8.0
   )
 
   for pkg in "${add_pkgs[@]}"; do
