@@ -25,7 +25,7 @@ su -
 
 #### 3. В консоль вставить команду целиком.
 ```bash
-wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/Linux/install.sh | bash <(cat) </dev/tty
+wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/beta/Linux/install.sh | bash <(cat) </dev/tty
 ```
 #### 4. Cледовать подсказкам, после выполнения хост перезагрузится.
 
@@ -57,7 +57,7 @@ killall MTCore
 # Пути к файлам MoonTrader
 Каталог с ядром
 ```bash
-cd ~/MoonTrader
+cd ~/moontrader
 ```
 Каталог с конфигом
 ```bash
