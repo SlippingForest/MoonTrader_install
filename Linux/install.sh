@@ -1,41 +1,12 @@
 #!/bin/bash
 
 declare -A tips=(
-    ["h_check_os_valid"]='{
-        "en":"Current operating system",
-        "ua":"Поточна операційна система",
-        "ru":"Текущая операционная система",
-        "es":"Sistema operativo actual"
-    }'
-    ["h_check_os_wrong"]='{
-        "en":"This script only supports Debian10+ and Ubuntu20+ operating systems",
-        "ua":"Цей скрипт підтримує тільки операційні системи Debian10+ і Ubuntu20+",
-        "ru":"Этот скрипт поддерживает только операционные системы Debian10+ и Ubuntu20+",
-        "es":"Este script solo es compatible con los sistemas operativos Debian10+ y Ubuntu20+"
-    }'
+    ["h_check_os_valid"]='{"en":"Current operating system","ua":"Поточна операційна система","ru":"Текущая операционная система","es":"Sistema operativo actual"}'
+    ["h_check_os_wrong"]='{"en":"This script only supports Debian10+ and Ubuntu20+ operating systems","ua":"Цей скрипт підтримує тільки операційні системи Debian10+ і Ubuntu20+","ru":"Этот скрипт поддерживает только операционные системы Debian10+ и Ubuntu20+","es":"Este script solo es compatible con los sistemas operativos Debian10+ y Ubuntu20+"}'
+    ["h_check_arch_wrong"]='{"en":"This script only supports AMD64 and ARM architectures","ua":"Цей скрипт підтримує тільки архітектури AMD64 і ARM","ru":"Этот скрипт поддерживает только архитектуры AMD64 и ARM","es":"Este script solo es compatible con las arquitecturas AMD64 y ARM"}'
+    ["h_check_arch_valid"]='{"en":"Current architecture","ua":"Поточна архітектура","ru":"Текущая архитектура","es":"Arquitectura actual"}'
     
-    
-    ["h_check_arch_wrong"]='{
-        "en":"This script only supports AMD64 and ARM architectures",
-        "ua":"Цей скрипт підтримує тільки архітектури AMD64 і ARM",
-        "ru":"Этот скрипт поддерживает только архитектуры AMD64 и ARM",
-        "es":"Este script solo es compatible con las arquitecturas AMD64 y ARM"
-    }'
-    ["h_check_arch_valid"]='{
-        "en":"Current architecture",
-        "ua":"Поточна архітектура",
-        "ru":"Текущая архитектура",
-        "es":"Arquitectura actual"
-    }'
-    
-    
-    ["h_check_root_wrong"]='{
-        "en":"This script must be run as root",
-        "ua":"Цей скрипт має бути виконаний від імені користувача root",
-        "ru":"Этот скрипт должен выполнятся от пользователя root",
-        "es":"Este script debe ejecutarse como root"
-    }'
-    
+    ["h_check_root_wrong"]='{"en":"This script must be run as root","ua":"Цей скрипт має бути виконаний від імені користувача root","ru":"Этот скрипт должен выполнятся от пользователя root","es":"Este script debe ejecutarse como root"}'
     
     ["h_exit"]='{"en":"Installation caneled.","ua":"Встановлення скасовано.","ru":"Установка отменена.","es":"Instalación cancelada."}'
     
@@ -52,51 +23,15 @@ declare -A tips=(
     ["h_msg_select"]='{"en":"Select","ua":"Вибір","ru":"Выбор","es":"Seleccionar"}'
     
     # setup messages
-    ["h_setup_install_text"]='{
-        "en":"Select installation option",
-        "ua":"Оберіть варіант встановлення",
-        "ru":"Выберите вариант установки",
-        "es":"Seleccione una opción de instalación"
-    }'
-    ["h_setup_tips"]='{
-        "en":"Use numbers to toggle, Enter to confirm, Q to exit.",
-        "ua":"Використовуйте цифри для перемикання, Enter для підтвердження, Q для виходу.",
-        "ru":"Используйте цифры для переключения, Enter для подтверждения, Q для выхода.",
-        "es":"Use números para alternar, Enter para confirmar, Q para salir."
-    }'
-    ["h_custom_setup_request"]='{
-        "en": "Custom installation setup:",
-        "ua": "Налаштування користувацького встановлення:",
-        "ru": "Настройка пользовательской установки:",
-        "es": "Configuración de instalación personalizada:"
-    }'
-    
+    ["h_setup_install_text"]='{"en":"Select installation option","ua":"Оберіть варіант встановлення","ru":"Выберите вариант установки","es":"Seleccione una opción de instalación"}'
+    ["h_setup_tips"]='{"en":"Use numbers to toggle, Enter to confirm, Q to exit.","ua":"Використовуйте цифри для перемикання, Enter для підтвердження, Q для виходу.","ru":"Используйте цифры для переключения, Enter для подтверждения, Q для выхода.","es":"Use números para alternar, Enter para confirmar, Q para salir."}'
+    ["h_custom_setup_request"]='{"en": "Custom installation setup:","ua": "Налаштування користувацького встановлення:","ru": "Настройка пользовательской установки:","es": "Configuración de instalación personalizada:"}'
     
     # select messages
-    ["h_select_installation_title"]='{
-        "en":"Choose an installation option",
-        "ua":"Оберіть варіант встановлення",
-        "ru":"Выберите вариант установки",
-        "es":"Elija una opción de instalación"
-    }'
-    ["h_select_installation_dropbox"]='{
-        "en":"Installation using https://www.dropbox.com/",
-        "ua":"Встановлення за допомогою https://www.dropbox.com/",
-        "ru":"Установка с использованием https://www.dropbox.com/",
-        "es":"Instalación usando https://www.dropbox.com/"
-    }'
-    ["h_select_installation_dropbox_link"]='{
-        "en":"Insert link",
-        "ua":"Вставте посилання",
-        "ru":"Вставьте ссылку",
-        "es":"Insertar enlace"
-    }'
-    ["h_select_installation_dropbox_link_wrong"]='{
-        "en":"Invalid link, please try again",
-        "ua":"Невірне посилання, спробуйте ще раз",
-        "ru":"Неправильная ссылка, попробуйте еще раз",
-        "es":"Enlace no válido, por favor inténtelo de nuevo"
-    }'
+    ["h_select_installation_title"]='{"en":"Choose an installation option","ua":"Оберіть варіант встановлення","ru":"Выберите вариант установки","es":"Elija una opción de instalación"}'
+    ["h_select_installation_dropbox"]='{"en":"Installation using https://www.dropbox.com/","ua":"Встановлення за допомогою https://www.dropbox.com/","ru":"Установка с использованием https://www.dropbox.com/","es":"Instalación usando https://www.dropbox.com/"}'
+    ["h_select_installation_dropbox_link"]='{"en":"Insert link","ua":"Вставте посилання","ru":"Вставьте ссылку","es":"Insertar enlace"}'
+    ["h_select_installation_dropbox_link_wrong"]='{"en":"Invalid link, please try again","ua":"Невірне посилання, спробуйте ще раз","ru":"Неправильная ссылка, попробуйте еще раз","es":"Enlace no válido, por favor inténtelo de nuevo"}'
     ["h_select_installation_type"]='{"en":"Selected installation type","ua":"Вибраний тип встановлення","ru":"Выбранный тип установки","es":"Tipo de instalación seleccionado"}'
     ["h_select_installation_link"]='{"en":"Link to installation archive","ua":"Посилання на інсталяційний архів","ru":"Ссылка на установочный архив","es":"Enlace al archivo de instalación"}'
     
@@ -106,10 +41,7 @@ declare -A tips=(
     ["h_install_packages_already"]='{"en":"Already installed","ua":"Вже встановлено","ru":"Уже установлено","es":"Ya instalado"}'
     ["h_install_packages_configure_start"]='{"en":"Configuring","ua":"Налаштування","ru":"Настройка","es":"Configuración"}'
     
-    
     ["h_install_packages_configure_complete"]='{"en":"Configuration completed","ua":"Налаштування завершено","ru":"Настройка завершена","es":"Configuración completada"}'
-    
-    
     
     ["h_create_mt_folder_title"]='{"en":"Creating a directory for installing MoonTrader","ua":"Створення каталогу для встановлення MoonTrader","ru":"Создание каталога для установки MoonTrader","es":"Creando un directorio para instalar MoonTrader"}'
     ["h_create_mt_folder_already_exist"]='{"en":"Directory for installing MoonTrader already exists","ua":"Каталог для встановлення MoonTrader вже існує","ru":"Каталог для установки MoonTrader уже существует","es":"El directorio para instalar MoonTrader ya existe"}'
@@ -124,42 +56,17 @@ declare -A tips=(
     ["h_update_packages_title"]='{"en":"Updating packages and dependencies","ua":"Оновлення пакетів та залежностей","ru":"Обновление пакетов и зависимостей","es":"Actualizando paquetes y dependencias"}'
     ["h_update_packages_complete"]='{"en":"Packages and dependencies update completed","ua":"Оновлення пакетів та залежностей завершено","ru":"Обновление пакетов и зависимостей завершено","es":"Actualización de paquetes y dependencias completada"}'
     
-    ["h_setup_firewall_execute"]='{
-        "en":"Setting up the firewall",
-        "ua":"Налаштування брандмауера",
-        "ru":"Настройка брандмауэра",
-        "es":"Configuración del firewall"
-    }'
+    ["h_setup_firewall_execute"]='{"en":"Setting up the firewall","ua":"Налаштування брандмауера","ru":"Настройка брандмауэра","es":"Configuración del firewall"}'
     ["h_setup_firewall_complete"]='{"en""The firewall is configured, allowed","ua""Брандмауер налаштован, дозволено","ru""Брандмауэр настроен, разрешено","es""El firewall está configurado, permitido"}'
     ["h_setup_firewall_already"]='{"en""Firewall is already configured, allowed","ua""Брандмауер вже налаштовано, дозволено","ru""Брандмауэр уже настроен, разрешено","es""El firewall ya está configurado, permitido"}'
     
     
     ["h_install_title"]='{"en":"Installing MoonTrader trading terminal core","ua":"Встановлення ядра торгового терміналу MoonTrader","ru":"Установка ядра торгового терминала MoonTrader","es":"Instalando núcleo del terminal de trading de MoonTrader"}'
-    ["h_install_mt_execute"]='{
-        "en":"Downloading, unpacking and installing the MoonTrader trading terminal core...",
-        "ua":"Завантаження, розпакування та встановлення ядра торгового терміналу MoonTrader...",
-        "ru":"Загрузка, распаковка и установка ядра торгового терминала MoonTrader...",
-        "es":"Descargando, descomprimiendo e instalando el núcleo del terminal de trading de MoonTrader..."
-    }'
-    ["h_install_mt_complete"]='{
-        "en":"Install, creation of startup script and quick launch link completed",
-        "ua":"Встановлення, створення скрипту запуску та посилання швидкого запуску завершено",
-        "ru":"Установка, создание скрипта запуска и ccылки быстрого запуска завершены",
-        "es":"Instalación, creación de script de inicio y enlace de inicio rápido completados"
-    }'
+    ["h_install_mt_execute"]='{"en":"Downloading, unpacking and installing the MoonTrader trading terminal core...","ua":"Завантаження, розпакування та встановлення ядра торгового терміналу MoonTrader...","ru":"Загрузка, распаковка и установка ядра торгового терминала MoonTrader...","es":"Descargando, descomprimiendo e instalando el núcleo del terminal de trading de MoonTrader..."}'
+    ["h_install_mt_complete"]='{"en":"Install, creation of startup script and quick launch link completed","ua":"Встановлення, створення скрипту запуску та посилання швидкого запуску завершено","ru":"Установка, создание скрипта запуска и ccылки быстрого запуска завершены","es":"Instalación, creación de script de inicio y enlace de inicio rápido completados"}'
     
-    ["h_complete_install_title"]='{
-        "en":"All installation operations completed successfully",
-        "ua":"Всі операції встановлення успішно завершені",
-        "ru":"Все операции установки успешно завершены",
-        "es":"Todas las operaciones de instalación se han completado correctamente"
-    }'
-    ["h_complete_install_waring"]='{
-        "en":"Make sure to use tmux/screen to run the MoonTrader trading terminal in the background, otherwise, after disconnecting from SSH, the MTCore will also be forcibly closed.",
-        "ua":"Переконайтеся, що ви використовуєте tmux/screen для запуску торгового терміналу MoonTrader в фоновому режимі, інакше після відключення від SSH - MTCore також буде примусово закрито.",
-        "ru":"Убедитесь, что вы используете tmux/screen для запуска торгового терминала MoonTrader в фоновом режиме, иначе после отключения от SSH - MTCore также будет принудительно закрыт.",
-        "es":"Asegúrese de usar tmux/screen para ejecutar el terminal de trading de MoonTrader en segundo plano, de lo contrario, después de desconectarse de SSH, MTCore también se cerrará forzosamente."
-    }'
+    ["h_complete_install_title"]='{"en":"All installation operations completed successfully","ua":"Всі операції встановлення успішно завершені","ru":"Все операции установки успешно завершены","es":"Todas las operaciones de instalación se han completado correctamente"}'
+    ["h_complete_install_waring"]='{"en":"Make sure to use tmux/screen to run the MoonTrader trading terminal in the background, otherwise, after disconnecting from SSH, the MTCore will also be forcibly closed.","ua":"Переконайтеся, що ви використовуєте tmux/screen для запуску торгового терміналу MoonTrader в фоновому режимі, інакше після відключення від SSH - MTCore також буде примусово закрито.","ru":"Убедитесь, что вы используете tmux/screen для запуска торгового терминала MoonTrader в фоновом режиме, иначе после отключения от SSH - MTCore также будет принудительно закрыт.","es":"Asegúrese de usar tmux/screen para ejecutar el terminal de trading de MoonTrader en segundo plano, de lo contrario, después de desconectarse de SSH, MTCore también se cerrará forzosamente."}'
     
     ["h_complete_install_info"]='{"en":"Full installation information","ua":"Повна інформація про встановлення","ru":"Полная информация об установке","es":"Información completa de instalación"}'
     ["h_complete_install_os"]='{"en":"Operating system","ua":"Операційна система","ru":"Операционная система","es":"Sistema operativo"}'
@@ -173,6 +80,9 @@ declare -A tips=(
 
 # Function to select language
 select_language() {
+    local selected_lang=1
+    local lang_list=("English" "Русский" "Українська" "Español")
+    
     declare -A messages=(
         ["en"]="Select script language"
         ["ru"]="Выберите язык скрипта"
@@ -180,10 +90,7 @@ select_language() {
         ["es"]="Seleccione el idioma del script"
     )
     
-    local selected_lang=1
-    local lang_list=("English" "Русский" "Українська" "Español")
     SCRIPT_LANG="en"
-    
     
     while true; do
         clear
@@ -216,8 +123,6 @@ select_language() {
             [Qq]) echo && log info "$(extract_tips "h_exit")" && exit 0;;
         esac
     done
-    
-    SCRIPT_LANG=$SCRIPT_LANG
 }
 
 
@@ -243,23 +148,22 @@ function extract_tips() {
 
 # Функции для логирования
 function log {
+    local message_type="$1"
+    local message="$2"
+    
     local color_info="\e[34m"      # Синий
     local color_warning="\e[33m"   # Желтый
     local color_error="\e[31m"     # Красный
     
     local color_help="\e[36m"      # Бирюзовый (Циан)
-    
     local color_execution="\e[35m" # Пурпурный
     local color_success="\e[32m"   # Зеленый
-    
     local color_example="\e[90m"   # Серый (темный)
     local color_hint="\e[94m"      # Светло-синий
     local color_select="\e[92m"    # Светло-зеленый
     
     local color_reset="\e[0m"      # Сброс всех цветовых настроек
     
-    local message_type="$1"
-    local message="$2"
     
     case $message_type in
         "execution")
@@ -332,6 +236,7 @@ function check_arch() {
 # Функция проверки на запуск от root
 function check_root {
     local os=$(check_os)
+    
     if [ "$(id -u)" != "0" ]; then
         log error "$(extract_tips "h_check_root_wrong")"
     fi
@@ -470,13 +375,12 @@ setup_custom() {
             echo "5) [ ] Setup Fail2Ban"
         fi
         if [[ $defender_choice -eq 1 ]]; then
-            echo "6) [✔] Setup MT Guardian"
+            echo "6) [✔] Setup MT Guardian (Problem with not created MT profile)"
         else
-            echo "6) [ ] Setup MT Guardian"
+            echo "6) [ ] Setup MT Guardian (Problem with not created MT profile)"
         fi
         echo
         log select "$(extract_tips "h_setup_tips")"
-        
         read -n 1 input
         case $input in
             1) custom_link_choice=$((1 - custom_link_choice)) ;;
@@ -499,16 +403,16 @@ setup_custom() {
 
 # Функция включения swap, если не включен
 function enable_swap() {
-    log execution "Enabling swap..."
+    log execution "$(extract_tips "h_install_packages_start"): Swap"
     if ! free | awk '/^Swap:/ {exit !$2}'; then
         fallocate -l 2G /swapfile
         chmod 600 /swapfile
         mkswap /swapfile
         swapon /swapfile
         bash -c 'echo "/swapfile none swap sw 0 0" >>/etc/fstab'
-        log success "Swap has been enabled."
+        log success "$(extract_tips "h_install_packages_comlpete"): Swap"
     else
-        log success "Swap is already enabled."
+        log success "$(extract_tips "h_install_packages_already"): Swap"
     fi
 }
 
@@ -526,7 +430,6 @@ install_package() {
         else
             log error "Error occurred during installation of $package_name. Exiting."
         fi
-        
         # Additional package-specific configurations
         case $package_name in
             "libtommath1")
@@ -556,7 +459,7 @@ install_package() {
 
 # Функция обновления пакетов и зависимостей
 function update_packages() {
-    log execution "$(extract_tips "h_update_packages_title")"
+    log execution "$(extract_tips "h_update_packages_title")..."
     apt update >/dev/null 2>&1 || log error "Error: Failed to update package lists."
     DEBIAN_FRONTEND=noninteractive apt upgrade -y >/dev/null 2>&1 || log error "Error: Failed to update packages."
     log success "$(extract_tips "h_update_packages_complete")"
@@ -565,6 +468,7 @@ function update_packages() {
 # Функция удаления ненужных пакетов и зависимостей
 function remove_packages() {
     local rm_pkgs=(snapd exim exim4)
+    
     for pkg in "${rm_pkgs[@]}"; do
         log execution "$(extract_tips "h_remove_packages_start"): $pkg"
         if dpkg -s $pkg >/dev/null 2>&1; then
@@ -581,7 +485,6 @@ function remove_packages() {
             log success "$(extract_tips "h_remove_packages_already"): $pkg"
         fi
     done
-    
     apt autoremove -y >/dev/null 2>&1 || log error "Error: Failed to remove unnecessary packages."
 }
 
@@ -592,6 +495,7 @@ install_dotnet() {
     local preferences_file="/etc/apt/preferences"
     local preferences_text="Package: dotnet* aspnet* netstandard*\nPin: origin \"packages.microsoft.com\"\nPin-Priority: -10"
     
+    # Check if the preferences file exists
     if [ -f "$preferences_file" ]; then
         # Search for the pattern in /etc/apt/preferences
         if ! grep -qE "Package: (dotnet\*|aspnet\*|netstandard\*)" "$preferences_file"; then
@@ -604,9 +508,8 @@ install_dotnet() {
         echo -e "$preferences_text" > "$preferences_file"
         apt-get update -y >/dev/null 2>&1
     fi
-    
-    
-    log execution "$(extract_tips "h_install_packages_start"): .NET $dotnet_version..."
+    # Install the .NET SDK or runtime
+    log execution "$(extract_tips "h_install_packages_start"): .NET $dotnet_version"
     if dotnet --list-runtimes &> /dev/null && dotnet --list-runtimes | grep -q "App $dotnet_version"; then
         log success "$(extract_tips "h_install_packages_already"): .NET runtime $dotnet_version"
     else
@@ -615,7 +518,7 @@ install_dotnet() {
     fi
 }
 
-# Функция включения и настройка firewall
+# Function to install the Fail2Ban package and configure it
 function setup_firewall() {
     log execution "$(extract_tips "h_setup_firewall_execute")"
     if ! iptables -nL | grep 4242 >/dev/null 2>&1; then
@@ -634,7 +537,7 @@ function setup_firewall() {
     fi
 }
 
-# Функция установки MoonTrader
+# Function to install the MoonTrader trading terminal core
 function install_mt() {
     log execution "$(extract_tips "h_install_mt_execute")"
     local user=$1
@@ -646,56 +549,52 @@ function install_mt() {
         rm -rf "$folder"
     fi
     mkdir -p "$folder"
-    
-    # Download and extract the archive if MTCore is not present
+    # Download the installation archive and extract it
     if [ ! -f "$folder/MTCore" ]; then
         wget -O MoonTrader.tar.xz "$link" >/dev/null 2>&1 || log error "Error: Failed to download the installation archive from $link."
         tar -xpJf MoonTrader.tar.xz -C $folder >/dev/null 2>&1 || log error "Error: Failed to extract the installation archive."
         rm MoonTrader.tar.xz
     fi
-    
-    # Create a startup script if MTCore exists and start_mt.sh does not
+    # Create a startup script and a quick launch link
     if [ -f "$folder/MTCore" ] && [ ! -f ""$folder/start_mt.sh"" ]; then
         chmod +x "$folder/MTCore"
         touch "$folder/start_mt.sh" && chmod +x "$folder/start_mt.sh"
-        
         echo -e "#!/bin/bash" > "$folder/start_mt.sh"
         echo -e "MTCORE_PATH=\"$folder/MTCore\"" >> "$folder/start_mt.sh"
         echo -e "if [ -n \"\$1\" ] && [ \"\$1\" == \"--no-update\" ]; then" >> "$folder/start_mt.sh"
         echo -e "    \"\$MTCORE_PATH\" --no-update" >> "$folder/start_mt.sh"
+        echo -e "elif [ \"\$1\" == \"--stop\" ]; then" >> "$folder/start_mt.sh"
+        echo -e "    killall MTCore" >> "$folder/start_mt.sh"
         echo -e "else" >> "$folder/start_mt.sh"
         echo -e "    \"\$MTCORE_PATH\"" >> "$folder/start_mt.sh"
         echo -e "fi" >> "$folder/start_mt.sh"
-        
         if [ -f "/usr/bin/MoonTrader" ]; then
             rm /usr/bin/MoonTrader
         fi
-        
         ln -s "$folder/start_mt.sh" /usr/bin/MoonTrader
     fi
-    
     # Change ownership of the folder to the specified user
     chown -R "$user:$user" "$folder" >/dev/null 2>&1 || log error "Error: Failed to change the owner of the folder to $user."
     log success "$(extract_tips "h_install_mt_complete")"
 }
 
+# Function to configure the time synchronization service
 function setup_time() {
     log execution "$(extract_tips "h_install_packages_configure_start"): chrony"
     timedatectl set-timezone Etc/UTC
-    
+    # Enable and start the chronyd service
+    systemctl enable chrony >/dev/null 2>&1 || log error "Error: Failed to enable chrony service."
+    # Configure the chrony service
     echo -e "# Start of chrony configuration" >/etc/chrony/chrony.conf
-    if [[ $(dmidecode --string system-uuid) =~ ^[Ee][Cc]2 ]]; then
-        # Configure time sync for AWS EC2
+    if [[ $(dmidecode --string system-uuid) =~ ^[Ee][Cc]2 ]]; then # Configure time sync for AWS EC2
         # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html
         echo -e "server 169.254.169.123 prefer iburst minpoll 4 maxpoll 4" >> /etc/chrony/chrony.conf
     fi
-    
     echo -e "server 0.pool.ntp.org iburst" >> /etc/chrony/chrony.conf
     echo -e "server 1.pool.ntp.org iburst" >> /etc/chrony/chrony.conf
     echo -e "server 2.pool.ntp.org iburst" >> /etc/chrony/chrony.conf
     echo -e "server 3.pool.ntp.org iburst" >> /etc/chrony/chrony.conf
     echo -e "pool time.aws.com iburst" >> /etc/chrony/chrony.conf
-    
     echo -e "minsources 2" >>/etc/chrony/chrony.conf
     echo -e "maxchange 1000 0 0" >>/etc/chrony/chrony.conf
     echo -e "makestep 0.1 1" >>/etc/chrony/chrony.conf
@@ -703,15 +602,11 @@ function setup_time() {
     echo -e "maxslewrate 500" >>/etc/chrony/chrony.conf
     echo -e "driftfile /var/lib/chrony/drift" >>/etc/chrony/chrony.conf
     echo -e "rtcsync" >>/etc/chrony/chrony.conf
-    
-    systemctl enable chrony >/dev/null 2>&1 || log error "Error: Failed to enable chrony service."
     # Restart chronyd service to apply the new configuration
     systemctl restart chronyd >/dev/null 2>&1 || log error "Error: Failed to restart chronyd service."
-    
     # Force chronyd to synchronize time immediately
     chronyc -a 'burst 2/2' >/dev/null 2>&1 || log error "Error: Failed to burst 2/2."
     chronyc -a makestep >/dev/null 2>&1 || log error "Error: Failed to makestep."
-    
     log success "$(extract_tips "h_install_packages_configure_complete"): chrony"
 }
 
@@ -768,6 +663,7 @@ install_package "psmisc"
 install_package "libncurses5"
 install_package "libtommath1"
 install_package "p7zip-full"
+install_package "git"
 
 install_dotnet 6.0
 install_dotnet 7.0
@@ -789,7 +685,40 @@ if [[ $SETUP_FAIL2BAN -eq 1 ]]; then
 fi
 
 if [[ $SETUP_MT_GUARDIAN -eq 1 ]]; then
-    log info "Support MT Guardian added soon"
+    log info "Setup MT Guardian"
+    # git clone to home directory/MTGuardian
+    if [ -d $DEFAULT_USER_DIRECTORY/MTGuardian ]; then
+        rm -rf $DEFAULT_USER_DIRECTORY/MTGuardian
+    fi
+    git clone https://github.com/SlippingForest/MTGuardian $DEFAULT_USER_DIRECTORY/MTGuardian
+    chmod +x $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian
+    
+    # find row MT_CORE_DIR=/full/path/to/mt/ in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/mt/ to $DEFAULT_USER_DIRECTORY/moontrader
+    sed -i "s|MT_CORE_DIR=.*|MT_CORE_DIR=$DEFAULT_USER_DIRECTORY/moontrader|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+    
+    
+    rc_file="/etc/rc.local"
+    rc_file_line="/bin/su -s /bin/bash $DEFAULT_USER -c \"/usr/bin/screen -dmS MoonTrader bash -c '$DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian; exec bash'\""
+    
+    # Check if rc.local exists and is executable
+    if [ ! -f "$rc_file" ]; then
+        echo "Creating $rc_file..."
+        echo -e "#!/bin/bash\n\n$rc_file_line\nexit 0" > "$rc_file"
+        chmod +x "$rc_file"
+    else
+        # Check if the script content is already in rc.local
+        if ! grep -q "$DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian" "$rc_file"; then
+            echo "Inserting script into $rc_file..."
+            # insert $rc_file_line before the "exit 0" line
+            sed -i "/exit 0/i $rc_file_line" "$rc_file"
+        else
+            echo "Script already exists in $rc_file."
+        fi
+    fi
+    
+    chown root:root "$rc_file"
+    chmod 700 "$rc_file"
+    log success "MT Guardian installed"
 fi
 
 install_mt "$DEFAULT_USER" "$DEFAULT_USER_DIRECTORY" "$SETUP_MT_LINK"
@@ -806,4 +735,3 @@ echo
 log warning "$(extract_tips "h_complete_install_reboot")"
 read -n 1
 reboot
-
