@@ -200,22 +200,39 @@ function log {
     esac
 }
 
+# # Функция проверки операционной системы
+# # Return: $(check_os)
+# function check_os() {
+#     if [ -f /etc/os-release ]; then
+#         source /etc/os-release
+#         if [ "$ID" = "debian" ]; then
+#             if [ "$VERSION_ID" = "10" ]; then
+#                 OS_NAME="Debian 10"
+#                 elif [ "$VERSION_ID" = "11" ]; then
+#                 OS_NAME="Debian 11"
+#             fi
+#             elif [ "$ID" = "ubuntu" ]; then
+#             if [ "$VERSION_ID" = "20.04" ]; then
+#                 OS_NAME="Ubuntu 20.04"
+#                 elif [ "$VERSION_ID" = "22.04" ]; then
+#                 OS_NAME="Ubuntu 22.04"
+#             fi
+#         else
+#             log error "$(extract_tips "h_check_os_wrong")"
+#         fi
+#     fi
+# }
+
 # Функция проверки операционной системы
 # Return: $(check_os)
 function check_os() {
     if [ -f /etc/os-release ]; then
         source /etc/os-release
-        if [ "$ID" = "debian" ]; then
-            if [ "$VERSION_ID" = "10" ]; then
-                OS_NAME="Debian 10"
-                elif [ "$VERSION_ID" = "11" ]; then
-                OS_NAME="Debian 11"
-            fi
-            elif [ "$ID" = "ubuntu" ]; then
-            if [ "$VERSION_ID" = "20.04" ]; then
-                OS_NAME="Ubuntu 20.04"
-                elif [ "$VERSION_ID" = "22.04" ]; then
+        if [ "$ID" = "ubuntu" ]; then
+            if [ "$VERSION_ID" = "22.04" ]; then
                 OS_NAME="Ubuntu 22.04"
+            else
+                log error "$(extract_tips "h_check_os_wrong")"
             fi
         else
             log error "$(extract_tips "h_check_os_wrong")"
