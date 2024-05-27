@@ -200,37 +200,18 @@ function log {
     esac
 }
 
-# # Функция проверки операционной системы
-# # Return: $(check_os)
-# function check_os() {
-#     if [ -f /etc/os-release ]; then
-#         source /etc/os-release
-#         if [ "$ID" = "debian" ]; then
-#             if [ "$VERSION_ID" = "10" ]; then
-#                 OS_NAME="Debian 10"
-#                 elif [ "$VERSION_ID" = "11" ]; then
-#                 OS_NAME="Debian 11"
-#             fi
-#             elif [ "$ID" = "ubuntu" ]; then
-#             if [ "$VERSION_ID" = "20.04" ]; then
-#                 OS_NAME="Ubuntu 20.04"
-#                 elif [ "$VERSION_ID" = "22.04" ]; then
-#                 OS_NAME="Ubuntu 22.04"
-#             fi
-#         else
-#             log error "$(extract_tips "h_check_os_wrong")"
-#         fi
-#     fi
-# }
-
 # Функция проверки операционной системы
 # Return: $(check_os)
 function check_os() {
     if [ -f /etc/os-release ]; then
         source /etc/os-release
         if [ "$ID" = "ubuntu" ]; then
-            if [ "$VERSION_ID" = "22.04" ]; then
+            if [ "$VERSION_ID" = "20.04" ]; then
+                OS_NAME="Ubuntu 20.04"
+                elif [ "$VERSION_ID" = "22.04" ]; then
                 OS_NAME="Ubuntu 22.04"
+                elif [ "$VERSION_ID" = "24.04" ]; then
+                OS_NAME="Ubuntu 24.04"
             else
                 log error "$(extract_tips "h_check_os_wrong")"
             fi
@@ -619,11 +600,8 @@ function setup_time() {
     echo -e "maxslewrate 500" >>/etc/chrony/chrony.conf
     echo -e "driftfile /var/lib/chrony/drift" >>/etc/chrony/chrony.conf
     echo -e "rtcsync" >>/etc/chrony/chrony.conf
-    # Restart chronyd service to apply the new configuration
     systemctl restart chronyd >/dev/null 2>&1 || log error "Error: Failed to restart chronyd service."
-    # Force chronyd to synchronize time immediately
-    chronyc -a 'burst 2/2' >/dev/null 2>&1 || log error "Error: Failed to burst 2/2."
-    chronyc -a makestep >/dev/null 2>&1 || log error "Error: Failed to makestep."
+
     log success "$(extract_tips "h_install_packages_configure_complete"): chrony"
 }
 
@@ -677,14 +655,14 @@ install_package "htop"
 install_package "mc"
 install_package "tmux"
 install_package "psmisc"
-install_package "libncurses5"
+install_package "libncurses6"
 install_package "libtommath1"
 install_package "p7zip-full"
 install_package "git"
 
-install_dotnet 6.0
-install_dotnet 7.0
-install_dotnet 8.0
+# install_dotnet 6.0
+# install_dotnet 7.0
+# install_dotnet 8.0
 
 # Install the necessary packages and dependencies
 if [[ $SETUP_TIME -eq 1 ]]; then
@@ -703,7 +681,6 @@ fi
 
 if [[ $SETUP_MT_GUARDIAN -eq 1 ]]; then
     log info "Setup MT Guardian"
-    # git clone to home directory/MTGuardian
     if [ -d $DEFAULT_USER_DIRECTORY/MTGuardian ]; then
         rm -rf $DEFAULT_USER_DIRECTORY/MTGuardian
     fi
@@ -712,6 +689,10 @@ if [[ $SETUP_MT_GUARDIAN -eq 1 ]]; then
     
     # find row MT_CORE_DIR=/full/path/to/mt/ in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/mt/ to $DEFAULT_USER_DIRECTORY/moontrader
     sed -i "s|MT_CORE_DIR=.*|MT_CORE_DIR=$DEFAULT_USER_DIRECTORY/moontrader|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
+     # find row MT_DEFAULT_PROFILE_CONFIG=/full/path/to/user/.config/moontrader-data/data/default.profile in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/user/.config/moontrader-data/data/default.profile to $DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile
+    sed -i "s|MT_DEFAULT_PROFILE_CONFIG=.*|MT_DEFAULT_PROFILE_CONFIG=$DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
     
     
     rc_file="/etc/rc.local"
