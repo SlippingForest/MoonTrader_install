@@ -373,9 +373,9 @@ setup_custom() {
             echo "5) [ ] Setup Fail2Ban"
         fi
         if [[ $defender_choice -eq 1 ]]; then
-            echo "6) [✔] Setup MT Guardian (Problem with not created MT profile)"
+            echo "6) [✔] Setup MT Guardian"
         else
-            echo "6) [ ] Setup MT Guardian (Problem with not created MT profile)"
+            echo "6) [ ] Setup MT Guardian"
         fi
         echo
         log select "$(extract_tips "h_setup_tips")"
@@ -693,6 +693,20 @@ if [[ $SETUP_MT_GUARDIAN -eq 1 ]]; then
      # find row MT_DEFAULT_PROFILE_CONFIG=/full/path/to/user/.config/moontrader-data/data/default.profile in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/user/.config/moontrader-data/data/default.profile to $DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile
     sed -i "s|MT_DEFAULT_PROFILE_CONFIG=.*|MT_DEFAULT_PROFILE_CONFIG=$DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
 
+
+    # request telegram token and chat_id
+    read -p "Enter name server for MT Guardian: " G_SERVER_NAME
+    read -p "Enter your Telegram bot token: " TELEGRAM_BOT_TOKEN
+    read -p "Enter your Telegram chat ID: " TELEGRAM_CHAT_ID
+
+    # find row MT_CORE_SERVER_NAME=moontrader in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace moontrader to $G_SERVER_NAME
+    sed -i "s|MT_CORE_SERVER_NAME=.*|MT_CORE_SERVER_NAME='$G_SERVER_NAME'|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
+    # find row TG_API_TOKEN=0000000000:AABBBBBBBBBBCCCCCCCCDDDDDDDFFFFFFFF in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace 0000000000:AABBBBBBBBBBCCCCCCCCDDDDDDDFFFFFFFF to $TELEGRAM_BOT_TOKEN
+    sed -i "s|TG_API_TOKEN=.*|TG_API_TOKEN=$TELEGRAM_BOT_TOKEN|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
+    # find row TG_CHAT_ID='-1234567890123 -2345678912345' in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace '-1234567890123 -2345678912345' to $TELEGRAM_CHAT_ID
+    sed -i "s|TG_CHAT_ID=.*|TG_CHAT_ID='$TELEGRAM_CHAT_ID'|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
     
     
     rc_file="/etc/rc.local"
