@@ -605,6 +605,60 @@ function setup_time() {
     log success "$(extract_tips "h_install_packages_configure_complete"): chrony"
 }
 
+function setup_mtguardian {
+     log info "Setup MT Guardian"
+    if [ -d $DEFAULT_USER_DIRECTORY/MTGuardian ]; then
+        rm -rf $DEFAULT_USER_DIRECTORY/MTGuardian
+    fi
+    git clone https://github.com/SlippingForest/MTGuardian $DEFAULT_USER_DIRECTORY/MTGuardian
+    chmod +x $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian
+    
+    # find row MT_CORE_DIR=/full/path/to/mt/ in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/mt/ to $DEFAULT_USER_DIRECTORY/moontrader
+    sed -i "s|MT_CORE_DIR=.*|MT_CORE_DIR=$DEFAULT_USER_DIRECTORY/moontrader|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
+     # find row MT_DEFAULT_PROFILE_CONFIG=/full/path/to/user/.config/moontrader-data/data/default.profile in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/user/.config/moontrader-data/data/default.profile to $DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile
+    sed -i "s|MT_DEFAULT_PROFILE_CONFIG=.*|MT_DEFAULT_PROFILE_CONFIG=$DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
+
+    # request telegram token and chat_id
+    read -p "Enter name server for MT Guardian: " G_SERVER_NAME
+    read -p "Enter your Telegram bot token: " TELEGRAM_BOT_TOKEN
+    read -p "Enter your Telegram chat ID: " TELEGRAM_CHAT_ID
+
+    # find row MT_CORE_SERVER_NAME=moontrader in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace moontrader to $G_SERVER_NAME
+    sed -i "s|MT_CORE_SERVER_NAME=.*|MT_CORE_SERVER_NAME='$G_SERVER_NAME'|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
+    # find row TG_API_TOKEN=0000000000:AABBBBBBBBBBCCCCCCCCDDDDDDDFFFFFFFF in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace 0000000000:AABBBBBBBBBBCCCCCCCCDDDDDDDFFFFFFFF to $TELEGRAM_BOT_TOKEN
+    sed -i "s|TG_API_TOKEN=.*|TG_API_TOKEN=$TELEGRAM_BOT_TOKEN|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+
+    # find row TG_CHAT_ID='-1234567890123 -2345678912345' in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace '-1234567890123 -2345678912345' to $TELEGRAM_CHAT_ID
+    sed -i "s|TG_CHAT_ID=.*|TG_CHAT_ID='$TELEGRAM_CHAT_ID'|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
+    
+    
+    rc_file="/etc/rc.local"
+    rc_file_line="/bin/su -s /bin/bash $DEFAULT_USER -c \"/usr/bin/screen -dmS MoonTrader bash -c '$DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian; exec bash'\""
+    
+    # Check if rc.local exists and is executable
+    if [ ! -f "$rc_file" ]; then
+        echo "Creating $rc_file..."
+        echo -e "#!/bin/bash\n\n$rc_file_line\nexit 0" > "$rc_file"
+        chmod +x "$rc_file"
+    else
+        # Check if the script content is already in rc.local
+        if ! grep -q "$DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian" "$rc_file"; then
+            echo "Inserting script into $rc_file..."
+            # insert $rc_file_line before the "exit 0" line
+            sed -i "/exit 0/i $rc_file_line" "$rc_file"
+        else
+            echo "Script already exists in $rc_file."
+        fi
+    fi
+    
+    chown root:root "$rc_file"
+    chmod 700 "$rc_file"
+    log success "MT Guardian installed"
+}
+
 
 ####################################################################################### Main body script #########################################################################################################
 SCRIPT_LANG=
@@ -680,57 +734,7 @@ if [[ $SETUP_FAIL2BAN -eq 1 ]]; then
 fi
 
 if [[ $SETUP_MT_GUARDIAN -eq 1 ]]; then
-    log info "Setup MT Guardian"
-    if [ -d $DEFAULT_USER_DIRECTORY/MTGuardian ]; then
-        rm -rf $DEFAULT_USER_DIRECTORY/MTGuardian
-    fi
-    git clone https://github.com/SlippingForest/MTGuardian $DEFAULT_USER_DIRECTORY/MTGuardian
-    chmod +x $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian
-    
-    # find row MT_CORE_DIR=/full/path/to/mt/ in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/mt/ to $DEFAULT_USER_DIRECTORY/moontrader
-    sed -i "s|MT_CORE_DIR=.*|MT_CORE_DIR=$DEFAULT_USER_DIRECTORY/moontrader|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
-
-     # find row MT_DEFAULT_PROFILE_CONFIG=/full/path/to/user/.config/moontrader-data/data/default.profile in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace /full/path/to/user/.config/moontrader-data/data/default.profile to $DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile
-    sed -i "s|MT_DEFAULT_PROFILE_CONFIG=.*|MT_DEFAULT_PROFILE_CONFIG=$DEFAULT_USER_DIRECTORY/.config/moontrader-data/data/default.profile|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
-
-
-    # request telegram token and chat_id
-    read -p "Enter name server for MT Guardian: " G_SERVER_NAME
-    read -p "Enter your Telegram bot token: " TELEGRAM_BOT_TOKEN
-    read -p "Enter your Telegram chat ID: " TELEGRAM_CHAT_ID
-
-    # find row MT_CORE_SERVER_NAME=moontrader in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace moontrader to $G_SERVER_NAME
-    sed -i "s|MT_CORE_SERVER_NAME=.*|MT_CORE_SERVER_NAME='$G_SERVER_NAME'|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
-
-    # find row TG_API_TOKEN=0000000000:AABBBBBBBBBBCCCCCCCCDDDDDDDFFFFFFFF in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace 0000000000:AABBBBBBBBBBCCCCCCCCDDDDDDDFFFFFFFF to $TELEGRAM_BOT_TOKEN
-    sed -i "s|TG_API_TOKEN=.*|TG_API_TOKEN=$TELEGRAM_BOT_TOKEN|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
-
-    # find row TG_CHAT_ID='-1234567890123 -2345678912345' in $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings and replace '-1234567890123 -2345678912345' to $TELEGRAM_CHAT_ID
-    sed -i "s|TG_CHAT_ID=.*|TG_CHAT_ID='$TELEGRAM_CHAT_ID'|" $DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian.settings
-    
-    
-    rc_file="/etc/rc.local"
-    rc_file_line="/bin/su -s /bin/bash $DEFAULT_USER -c \"/usr/bin/screen -dmS MoonTrader bash -c '$DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian; exec bash'\""
-    
-    # Check if rc.local exists and is executable
-    if [ ! -f "$rc_file" ]; then
-        echo "Creating $rc_file..."
-        echo -e "#!/bin/bash\n\n$rc_file_line\nexit 0" > "$rc_file"
-        chmod +x "$rc_file"
-    else
-        # Check if the script content is already in rc.local
-        if ! grep -q "$DEFAULT_USER_DIRECTORY/MTGuardian/MTGuardian" "$rc_file"; then
-            echo "Inserting script into $rc_file..."
-            # insert $rc_file_line before the "exit 0" line
-            sed -i "/exit 0/i $rc_file_line" "$rc_file"
-        else
-            echo "Script already exists in $rc_file."
-        fi
-    fi
-    
-    chown root:root "$rc_file"
-    chmod 700 "$rc_file"
-    log success "MT Guardian installed"
+    setup_mtguardian
 fi
 
 install_mt "$DEFAULT_USER" "$DEFAULT_USER_DIRECTORY" "$SETUP_MT_LINK"
