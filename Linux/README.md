@@ -15,15 +15,9 @@
 sudo su
 ```
 2. Установите MoonTrader, выполнив следующую команду в терминале:
-Основной скрипт
 ```bash
-wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/beta/Linux/install.sh | bash <(cat) </dev/tty
+wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/Linux/install.sh | bash <(cat) </dev/tty
 ```
-Бета версия
-```bash
-wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/beta/Linux/install.sh | bash <(cat) </dev/tty
-```
-
 ## Запуск MoonTrader с помощью tmux
 Чтобы MoonTrader продолжал работать даже при отключении терминальной сессии, рекомендуется использовать `tmux`.
 
