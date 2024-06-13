@@ -2,7 +2,7 @@
 
 declare -A tips=(
     ["h_check_os_valid"]='{"en":"Current operating system","ua":"Поточна операційна система","ru":"Текущая операционная система","es":"Sistema operativo actual"}'
-    ["h_check_os_wrong"]='{"en":"This script only supports Debian10+ and Ubuntu20+ operating systems","ua":"Цей скрипт підтримує тільки операційні системи Debian10+ і Ubuntu20+","ru":"Этот скрипт поддерживает только операционные системы Debian10+ и Ubuntu20+","es":"Este script solo es compatible con los sistemas operativos Debian10+ y Ubuntu20+"}'
+    ["h_check_os_wrong"]='{"en":"This script only supports Ubuntu20+ operating systems","ua":"Цей скрипт підтримує тільки операційні системи Ubuntu20+","ru":"Этот скрипт поддерживает только операционные системы Ubuntu20+","es":"Este script solo es compatible con los sistemas operativos Ubuntu20+"}'
     ["h_check_arch_wrong"]='{"en":"This script only supports AMD64 and ARM architectures","ua":"Цей скрипт підтримує тільки архітектури AMD64 і ARM","ru":"Этот скрипт поддерживает только архитектуры AMD64 и ARM","es":"Este script solo es compatible con las arquitecturas AMD64 y ARM"}'
     ["h_check_arch_valid"]='{"en":"Current architecture","ua":"Поточна архітектура","ru":"Текущая архитектура","es":"Arquitectura actual"}'
     
@@ -458,8 +458,8 @@ install_package() {
 # Функция обновления пакетов и зависимостей
 function update_packages() {
     log execution "$(extract_tips "h_update_packages_title")..."
-    apt update >/dev/null 2>&1 || log error "Error: Failed to update package lists."
-    DEBIAN_FRONTEND=noninteractive apt upgrade -y >/dev/null 2>&1 || log error "Error: Failed to update packages."
+    apt update || log error "Error: Failed to update package lists."
+    DEBIAN_FRONTEND=noninteractive apt upgrade -y || log error "Error: Failed to update packages."
     log success "$(extract_tips "h_update_packages_complete")"
 }
 
