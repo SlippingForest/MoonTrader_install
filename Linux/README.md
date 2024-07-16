@@ -42,6 +42,18 @@ wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/ma
       ```bash
       MoonTrader --stop
       ```
+   - Очистка профиля(для настройки как при первом запуске)
+      ```bash
+      rm -R ~/.config/moontrader-data/data
+      ```
+   - Очистка логов
+      ```bash
+      rm -R ~/.config/moontrader-data/data/logs/
+      ```
+   - Очистка архивных данных
+      ```bash
+      rm -R ~/.config/moontrader-data/data/archive/
+      ```
 
 ## Дополнительная информация
 - Запуск MoonTrader без обновления
