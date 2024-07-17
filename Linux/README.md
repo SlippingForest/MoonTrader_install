@@ -8,12 +8,12 @@
 - Ubuntu 20.04 LTS
 - Ubuntu 22.04 LTS
 - Ubuntu 24.04 LTS
+- Debian 12
 
 ## Установка
 1. Переключитесь на пользователя `root`
-```bash
-sudo su
-```
+- Ubuntu: `sudo su` 
+- Debian `su -`
 2. Установите MoonTrader, выполнив следующую команду в терминале:
 ```bash
 wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/Linux/install.sh | bash <(cat) </dev/tty
@@ -61,6 +61,11 @@ wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/ma
    MoonTrader --no-update
    ```
 ---
+
+## MTGuardian
+- Для установки нужно выбрать пункт `Custom` 
+
+
 
 Следуя этим инструкциям, вы сможете установить и запустить MoonTrader на вашей системе Ubuntu, обеспечив его непрерывную работу даже при завершении терминальной сессии. Удачной торговли!
 
