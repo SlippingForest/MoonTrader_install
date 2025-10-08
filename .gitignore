@@ -1,1 +1,45 @@
-.vscode
+# IDE специфичные файлы
+.vscode/
+.idea/
+*.sublime-*
+
+# Cursor IDE файлы
+.cursor/
+.cursorrules
+.cursorignore
+
+# VSCode расширения и настройки
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/extensions.json
+.vscode/sftp.json
+
+# JetBrains IDE файлы
+*.iml
+*.ipr
+*.iws
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries/
+.idea/shelf/
+
+# Другие редакторы
+*.sublime-project
+*.sublime-workspace
+.vim/
+*.swp
+*.swo
+
+# Временные файлы
+*.tmp
+*.swp
+*~
+
+# OS специфичные файлы
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# НО разрешаем .editorconfig (важен для окончаний строк)
+!.editorconfig
