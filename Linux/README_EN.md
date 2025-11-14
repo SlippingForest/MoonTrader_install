@@ -33,23 +33,27 @@ Automatic installer for MoonTrader trading terminal for Linux systems with MTGua
 
 ## 🚀 Quick Installation
 
-### 1. System Preparation
+### 1. Connect via SSH
+Use an SSH client of your choice to connect to your server:
+- **Windows**: for example, [MobaXterm](https://mobaxterm.mobatek.net/), [mRemoteNG](https://mremoteng.org/) (links provided as examples and may be outdated)
+- **Linux/Mac**: built-in SSH client in terminal
+
 ```bash
-# Switch to root
+ssh user@your-server-ip
+```
+
+### 2. Elevate to Root
+```bash
+# For Ubuntu
 sudo su
 
-# Or for Debian
+# For Debian
 su -
 ```
 
-### 2. Automatic Installation
+### 3. Installation
 ```bash
 wget -O - https://raw.githubusercontent.com/SlippingForest/MoonTrader_install/master/Linux/install.sh | bash <(cat) </dev/tty
-```
-
-### 3. Start MoonTrader
-```bash
-MoonTrader
 ```
 
 ## 🔧 Installation Options
