@@ -313,7 +313,7 @@ function get_user() {
     local list_users
     local error_output
 
-    # Get user list with error handling
+    # Get user list with error handling (for validation only)
     if ! list_users=($(awk -F: '($3>=1000)&&($1!="nobody"){print $1}' /etc/passwd 2>/dev/null)); then
         log error "$(extract_tips "h_get_user_error"): Failed to read /etc/passwd"
         return 1
@@ -322,48 +322,42 @@ function get_user() {
     # Method 1: Try to get currently logged in user (works for SSH and web consoles)
     if [ -z "$detected_user" ]; then
         local current_user=$(who am i 2>/dev/null | awk '{print $1}')
-        if [ -n "$current_user" ] && [ "$current_user" != "root" ]; then
+        if [ -n "$current_user" ]; then
             detected_user="$current_user"
             log info "Detected current user via 'who am i': $detected_user"
         fi
     fi
 
-    # Method 2: Try to get user from SUDO_USER (if script run via sudo)
-    if [ -z "$detected_user" ] && [ -n "$SUDO_USER" ] && [ "$SUDO_USER" != "root" ]; then
-        detected_user="$SUDO_USER"
-        log info "Detected user via SUDO_USER: $detected_user"
-    fi
-
-    # Method 3: Try to get the last logged in user from 'last' (any terminal type)
+    # Method 2: Try to get the last logged in user from 'last' (any terminal type)
     if [ -z "$detected_user" ]; then
         if ! error_output=$(last -1 2>&1); then
             log warning "Failed to get last login user: $error_output"
         else
             local last_user=$(echo "$error_output" | head -1 | awk '{print $1}')
-            if [ -n "$last_user" ] && [ "$last_user" != "root" ] && [ "$last_user" != "reboot" ] && [ "$last_user" != "wtmp" ]; then
+            if [ -n "$last_user" ] && [ "$last_user" != "reboot" ] && [ "$last_user" != "wtmp" ]; then
                 detected_user="$last_user"
                 log info "Detected last login user via 'last': $detected_user"
             fi
         fi
     fi
 
-    # Method 4: Try to get user from currently active sessions (SSH, web console, tty)
+    # Method 3: Try to get user from currently active sessions (SSH, web console, tty)
     if [ -z "$detected_user" ]; then
-        local active_user=$(w -h 2>/dev/null | grep -v "^root" | head -1 | awk '{print $1}')
+        local active_user=$(w -h 2>/dev/null | head -1 | awk '{print $1}')
         if [ -n "$active_user" ]; then
             detected_user="$active_user"
             log info "Detected active user via 'w': $detected_user"
         fi
     fi
 
-    # Method 5: Check last login from any pts or tty (SSH and local console)
+    # Method 4: Check last login from any pts or tty (SSH and local console)
     if [ -z "$detected_user" ]; then
         for terminal in pts/0 pts/1 tty1 tty2; do
             if ! error_output=$(last $terminal -1 2>&1); then
                 continue
             else
                 local terminal_user=$(echo "$error_output" | awk '{print $1; exit}')
-                if [ -n "$terminal_user" ] && [ "$terminal_user" != "root" ] && [ "$terminal_user" != "reboot" ]; then
+                if [ -n "$terminal_user" ] && [ "$terminal_user" != "reboot" ]; then
                     detected_user="$terminal_user"
                     log info "Detected user from terminal $terminal: $detected_user"
                     break
@@ -372,25 +366,41 @@ function get_user() {
         done
     fi
 
-    # Validate detected user against real user list
-    for list_user in "${list_users[@]}"; do
-        if [[ "$list_user" == "$detected_user" ]]; then
-            user=$list_user
-            break
-        fi
-    done
+    # Use detected user (can be root or regular user)
+    if [ -n "$detected_user" ]; then
+        # Check if detected user is root
+        if [ "$detected_user" == "root" ]; then
+            user="root"
+            log info "Using detected root user"
+        else
+            # Validate detected user against real user list
+            for list_user in "${list_users[@]}"; do
+                if [[ "$list_user" == "$detected_user" ]]; then
+                    user=$list_user
+                    break
+                fi
+            done
 
-    # If no non-root user found, use the first available user or root
+            # If detected user not in list, still try to use it
+            if [ -z "$user" ]; then
+                user="$detected_user"
+                log warning "User '$detected_user' not in standard user list, but using anyway"
+            fi
+        fi
+    fi
+
+    # Fallback: If no user detected at all, use first available user or root
     if [ -z "$user" ]; then
         if [ ${#list_users[@]} -gt 0 ]; then
             user="${list_users[0]}"
             log warning "No specific user detected, using first available user: $user"
         else
             user="root"
-            log warning "No non-root users found, using root"
+            log warning "No users detected, using root"
         fi
     fi
 
+    # Get home directory for selected user
     if [ -n "$user" ]; then
         DEFAULT_USER=$user
         if ! DEFAULT_USER_DIRECTORY=$(eval echo ~$user 2>/dev/null); then
