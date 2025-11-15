@@ -330,7 +330,7 @@ function get_user() {
 
     # Method 2: Try to get the last logged in user from 'last' (any terminal type)
     if [ -z "$detected_user" ]; then
-        if ! error_output=$(last -1 2>&1); then
+        if ! error_output=$(last -1 -w 2>&1); then
             log warning "Failed to get last login user: $error_output"
         else
             local last_user=$(echo "$error_output" | head -1 | awk '{print $1}')
@@ -353,7 +353,7 @@ function get_user() {
     # Method 4: Check last login from any pts or tty (SSH and local console)
     if [ -z "$detected_user" ]; then
         for terminal in pts/0 pts/1 tty1 tty2; do
-            if ! error_output=$(last $terminal -1 2>&1); then
+            if ! error_output=$(last $terminal -1 -w 2>&1); then
                 continue
             else
                 local terminal_user=$(echo "$error_output" | awk '{print $1; exit}')
@@ -373,18 +373,21 @@ function get_user() {
             user="root"
             log info "Using detected root user"
         else
-            # Validate detected user against real user list
-            for list_user in "${list_users[@]}"; do
-                if [[ "$list_user" == "$detected_user" ]]; then
-                    user=$list_user
-                    break
-                fi
-            done
-
-            # If detected user not in list, still try to use it
-            if [ -z "$user" ]; then
+            # First, check if detected user exists in the system (handles truncated names)
+            if id "$detected_user" &>/dev/null; then
                 user="$detected_user"
-                log warning "User '$detected_user' not in standard user list, but using anyway"
+                log info "Using detected user: $detected_user"
+            else
+                # User might be truncated, try to find matching user in the list
+                log warning "Detected user '$detected_user' does not exist, searching for matches..."
+                for list_user in "${list_users[@]}"; do
+                    # Check if list_user starts with detected_user (handles truncated names)
+                    if [[ "$list_user" == "$detected_user"* ]]; then
+                        user=$list_user
+                        log info "Found matching user: $list_user (detected as: $detected_user)"
+                        break
+                    fi
+                done
             fi
         fi
     fi
