@@ -1184,14 +1184,21 @@ function install_mt() {
             return 1
         fi
 
-        if [ -f "/usr/bin/MoonTrader" ]; then
-            rm /usr/bin/MoonTrader
+        # Remove existing symlink or file if it exists
+        if [ -e "/usr/bin/MoonTrader" ] || [ -L "/usr/bin/MoonTrader" ]; then
+            if ! rm -f /usr/bin/MoonTrader 2>/dev/null; then
+                log error "Failed to remove existing /usr/bin/MoonTrader"
+                return 1
+            fi
         fi
 
-        if ! ln -s "$folder/start_mt.sh" /usr/bin/MoonTrader; then
-            log error "Failed to create MoonTrader symlink"
+        # Create symlink
+        if ! ln -s "$folder/start_mt.sh" /usr/bin/MoonTrader 2>/dev/null; then
+            log error "Failed to create MoonTrader symlink from $folder/start_mt.sh to /usr/bin/MoonTrader"
             return 1
         fi
+
+        log success "MoonTrader command link created successfully"
     fi
 
     # Change ownership of the folder to the specified user
